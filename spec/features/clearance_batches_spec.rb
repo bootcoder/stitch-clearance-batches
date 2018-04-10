@@ -110,8 +110,22 @@ describe "add new monthly clearance_batch" do
 
         within('table.clearance_batches') do
           first('.pdf-btn').click
+          # has path
           expect(current_path).to eq clearance_batch_path(batch_1, format: :pdf)
+          # is a PDF
           expect(page.response_headers).to have_content('application/pdf')
+          # contains correct filename
+          expect(page.response_headers).to have_content("clearance_batch_#{batch_1.id}.pdf")
+
+          # PDF Content
+          # contains title
+          temp_pdf = Tempfile.new('pdf')
+          temp_pdf << page.source.force_encoding('UTF-8')
+          reader = PDF::Reader.new(temp_pdf)
+          pdf_text = reader.pages.map(&:text)
+          temp_pdf.close
+          page.driver.response.instance_variable_set('@body', pdf_text)
+          expect(page.body).to have_content("Clearance Batch #{batch_1.id} Report:")
         end
       end
 

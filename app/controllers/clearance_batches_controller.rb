@@ -9,7 +9,9 @@ class ClearanceBatchesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "clearance_batch_#{@clearance_batch.id}", template: 'clearance_batches/_show.html.erb'
+        render pdf: "clearance_batch_#{@clearance_batch.id}",
+               template: 'clearance_batches/_show.html.erb',
+               title: "clearance_batch_#{@clearance_batch.id}"
       end
     end
   end
