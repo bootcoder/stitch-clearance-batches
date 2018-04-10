@@ -4,6 +4,16 @@ class ClearanceBatchesController < ApplicationController
     @clearance_batches  = ClearanceBatch.all
   end
 
+  def show
+    @clearance_batch = ClearanceBatch.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: "clearance_batch_#{@clearance_batch.id}", template: 'clearance_batches/_show.html.erb'
+      end
+    end
+  end
+
   def create
     clearancing_status = ClearancingService.new.process_file(params[:csv_batch_file].tempfile)
     clearance_batch    = clearancing_status.clearance_batch

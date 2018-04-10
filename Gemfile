@@ -18,3 +18,9 @@ group :test, :development do
 end
 
 gem 'extra_print'
+gem 'pry-rails'
+gem 'pry-byebug'
+
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
+

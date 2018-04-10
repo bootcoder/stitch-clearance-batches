@@ -14,14 +14,16 @@
       <th></th>
       <th>Date clearanced</th>
       <th>Number of items clearanced</th>
+      <th>Reports</th>
     </tr>
   </thead>
   <tbody>
     <%- @clearance_batches.each do |clearance_batch| -%>
-      <tr>
+      <tr class='batch_row'>
         <td>Clearance Batch <%= clearance_batch.id %></td>
         <td><%= l(clearance_batch.created_at, format: :short) %></td>
         <td><%= clearance_batch.items.count %></td>
+        <td><%= button_to "PDF", clearance_batch_path(clearance_batch, format: :pdf), method: :get, class: 'pdf-btn'  %></td>
       </tr>
     <%- end -%>
   </tbody>
