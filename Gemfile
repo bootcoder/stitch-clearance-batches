@@ -15,6 +15,7 @@ group :test, :development do
   gem "database_cleaner"
   gem "ruby_css_lint"
   gem "selenium-webdriver"
+  gem 'pdf-reader'
 end
 
 gem 'extra_print'
@@ -23,4 +24,3 @@ gem 'pry-byebug'
 
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
-
