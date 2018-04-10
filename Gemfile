@@ -16,3 +16,5 @@ group :test, :development do
   gem "ruby_css_lint"
   gem "selenium-webdriver"
 end
+
+gem 'extra_print'
