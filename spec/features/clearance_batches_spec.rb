@@ -8,6 +8,7 @@ describe "add new monthly clearance_batch" do
 
       let!(:clearance_batch_1) { FactoryGirl.create(:clearance_batch) }
       let!(:clearance_batch_2) { FactoryGirl.create(:clearance_batch) }
+      let!(:clearance_batch_3) { FactoryGirl.create(:clearance_batch) }
 
       it "displays a list of all past clearance batches" do
         visit "/"
@@ -16,6 +17,7 @@ describe "add new monthly clearance_batch" do
         within('table.clearance_batches') do
           expect(page).to have_content("Clearance Batch #{clearance_batch_1.id}")
           expect(page).to have_content("Clearance Batch #{clearance_batch_2.id}")
+          expect(page).to have_content("Clearance Batch #{clearance_batch_3.id}")
         end
       end
 
@@ -86,6 +88,45 @@ describe "add new monthly clearance_batch" do
         end
       end
     end
+
+    describe "PDF report" do
+      let(:batch) {FactoryGirl.create(:clearance_batch_with_items)}
+
+      it "has a link to generate PDF" do
+        eap batch.items
+        expect(batch.items.length).to eq (5)
+      end
+
+      it "renders PDF" do
+
+      end
+
+    end
+
   end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
