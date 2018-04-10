@@ -90,15 +90,29 @@ describe "add new monthly clearance_batch" do
     end
 
     describe "PDF report" do
-      let(:batch) {FactoryGirl.create(:clearance_batch_with_items)}
+      let!(:batch_1) {FactoryGirl.create(:clearance_batch_with_items)}
+      let!(:batch_2) {FactoryGirl.create(:clearance_batch_with_items)}
 
       it "has a link to generate PDF" do
-        eap batch.items
-        expect(batch.items.length).to eq (5)
+
+        visit "/"
+
+        within('table.clearance_batches') do
+          btn = first('.pdf-btn')
+          expect(btn.value).to eq 'PDF'
+        end
+
       end
 
       it "renders PDF" do
 
+        visit '/'
+
+        within('table.clearance_batches') do
+          first('.pdf-btn').click
+          expect(current_path).to eq clearance_batch_path(batch_1, format: :pdf)
+          expect(page.response_headers).to have_content('application/pdf')
+        end
       end
 
     end
