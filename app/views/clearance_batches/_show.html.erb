@@ -1,6 +1,10 @@
-<h2>Clearance Batch <%= @clearance_batch.id %> Report:</h2>
+<div id='report-header'>
+  <h2>Clearance Batch <%= @clearance_batch.id %> Report:</h2>
+  <%= button_to "PDF", clearance_batch_path(@clearance_batch, format: :pdf), method: :get, class: 'report-btn pdf-btn'  %>
+  <%= button_to "CSV", clearance_batch_path(@clearance_batch, format: :csv), method: :get, class: 'report-btn csv-btn'  %>
+</div>
 
-<table id='batch-report'>
+<table id='batch-report' class='table-dark'>
   <thead>
     <th scope='col' >ID</th>
     <th scope='col' >Color</th>

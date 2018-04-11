@@ -21,6 +21,7 @@ ActiveRecord::Migration.maintain_test_schema!
 RSpec.configure do |config|
 
   config.include CsvHelper
+  config.include CapybaraHelper
 
   config.use_transactional_fixtures = true
 
@@ -36,7 +37,7 @@ RSpec.configure do |config|
       DatabaseCleaner.clean
     end
   end
-  
+
   config.around(:each) do |ex|
     DatabaseCleaner.cleaning do
       ex.run
