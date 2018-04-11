@@ -98,7 +98,8 @@ describe "add new monthly clearance_batch" do
         visit "/"
 
         within('table.clearance_batches') do
-          btn = first('.pdf-btn')
+          btn = page.all('.report-btn')[1]
+          # btn = first('.report-btn')
           expect(btn.value).to eq 'PDF'
         end
 
@@ -109,7 +110,7 @@ describe "add new monthly clearance_batch" do
         visit '/'
 
         within('table.clearance_batches') do
-          first('.pdf-btn').click
+          page.all('.report-btn')[1].click
           # has path
           expect(current_path).to eq clearance_batch_path(batch_1, format: :pdf)
           # is a PDF
@@ -117,15 +118,19 @@ describe "add new monthly clearance_batch" do
           # contains correct filename
           expect(page.response_headers).to have_content("clearance_batch_#{batch_1.id}.pdf")
 
-          # PDF Content
-          # contains title
+          # PDF Content Setup
           temp_pdf = Tempfile.new('pdf')
           temp_pdf << page.source.force_encoding('UTF-8')
           reader = PDF::Reader.new(temp_pdf)
           pdf_text = reader.pages.map(&:text)
           temp_pdf.close
           page.driver.response.instance_variable_set('@body', pdf_text)
+
+          # contains title
           expect(page.body).to have_content("Clearance Batch #{batch_1.id} Report:")
+          # binding.pry
+          # contains items
+          # will test in the _show since that is what is rendered
         end
       end
 
@@ -134,7 +139,45 @@ describe "add new monthly clearance_batch" do
   end
 end
 
+describe 'show' do
 
+  let!(:batch_1) {FactoryGirl.create(:clearance_batch_with_items)}
+  let!(:batch_2) {FactoryGirl.create(:clearance_batch_with_items)}
+
+  it "navigates to the correct show" do
+    visit '/'
+    within('table.clearance_batches') do
+
+      within(first('.batch-row')) do
+        click_button('View')
+        expect(current_path).to eq clearance_batch_path(batch_1)
+      end
+    end
+  end
+
+  it "renders report" do
+
+    visit '/clearance_batches/1'
+
+    within('table#batch-report') do
+      expect(page).to have_content(batch_1.items.first.price_sold.to_f)
+    end
+
+  end
+
+  it "has alternating backgrounds" do
+
+    visit '/clearance_batches/1'
+
+    within('table#batch-report') do
+      first_row = first('.report-row')
+      second_row = page.all('.report-row')[1]
+      expect(first_row[:class].include?('gray-bg')).to be true
+      expect(second_row[:class].include?('gray-bg')).to be false
+    end
+
+  end
+end
 
 
 

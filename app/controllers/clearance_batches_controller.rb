@@ -5,9 +5,10 @@ class ClearanceBatchesController < ApplicationController
   end
 
   def show
-    @clearance_batch = ClearanceBatch.find(params[:id])
+    @clearance_batch = ClearanceBatch.includes(:items).find(params[:id])
+    # binding.pry
     respond_to do |format|
-      format.html
+      format.html { render '_show.html.erb' }
       format.pdf do
         render pdf: "clearance_batch_#{@clearance_batch.id}",
                template: 'clearance_batches/_show.html.erb',
