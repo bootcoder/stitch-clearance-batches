@@ -116,7 +116,7 @@ describe "clearance_batch" do
 
     context 'PDF' do
 
-      it 'navigates to PDF' do
+      it 'navigates to PDF report' do
         visit '/'
         within('table.clearance_batches') do
           first('.pdf-btn').click
@@ -175,7 +175,7 @@ describe "clearance_batch" do
         end
       end
 
-      it "has alternating backgrounds" do
+      it "rows have alternating backgrounds" do
         visit '/clearance_batches/1'
         within('table#batch-report') do
           first_row = first('.report-row')
