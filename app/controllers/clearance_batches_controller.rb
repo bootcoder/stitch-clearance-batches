@@ -1,3 +1,5 @@
+require 'csv'
+
 class ClearanceBatchesController < ApplicationController
 
   def index
@@ -6,14 +8,14 @@ class ClearanceBatchesController < ApplicationController
 
   def show
     @clearance_batch = ClearanceBatch.includes(:items).find(params[:id])
-    # binding.pry
     respond_to do |format|
-      format.html { render '_show.html.erb' }
+      format.html
       format.pdf do
         render pdf: "clearance_batch_#{@clearance_batch.id}",
                template: 'clearance_batches/_show.html.erb',
                title: "clearance_batch_#{@clearance_batch.id}"
       end
+      format.csv
     end
   end
 
