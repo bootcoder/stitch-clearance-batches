@@ -8,8 +8,9 @@ class Item < ActiveRecord::Base
   scope :sellable, -> { where(status: 'sellable') }
 
   def clearance!
-    update_attributes!(status: 'clearanced', 
-                       price_sold: style.wholesale_price * CLEARANCE_PRICE_PERCENTAGE)
+    update_attributes!(status: 'clearanced',
+                       price_sold: style.wholesale_price * CLEARANCE_PRICE_PERCENTAGE,
+                       sold_at: DateTime.now)
   end
 
 end

@@ -1,1 +1,31 @@
-Clearance Batch <%= @clearance_batch.id %> Report:
+<h2>Clearance Batch <%= @clearance_batch.id %> Report:</h2>
+
+<table id='batch-report'>
+  <thead>
+    <th scope='col' >ID</th>
+    <th scope='col' >Color</th>
+    <th scope='col' >Price Sold</th>
+    <th scope='col' >Style</th>
+    <th scope='col' >Date Sold</th>
+    <th scope='col' >Status</th>
+  </thead>
+  <tbody>
+    <% @clearance_batch.items.each_with_index do |item, idx| %>
+      <tr class="<%= idx % 2 == 0 ? 'gray-bg' : '' %> report-row">
+        <th scope='row' ><%= item.id %></th>
+        <td><%= item.color %></td>
+        <td><%= number_to_currency(item.price_sold) %></td>
+        <td><%= item.style.name %></td>
+        <td><%= l(item.sold_at, format: :short) %></td>
+        <td><%= item.status %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<!-- * size
+* color
+* status - sellable, not sellable, sold, clearanced
+* price sold
+* date sold
+ -->
