@@ -1,11 +1,5 @@
-<div id='report-header'>
-  <h2>Clearance Batch <%= @clearance_batch.id %> Report:</h2>
-  <%= button_to "PDF", clearance_batch_path(@clearance_batch, format: :pdf), method: :get, class: 'report-btn pdf-btn'  %>
-  <%= button_to "CSV", clearance_batch_path(@clearance_batch, format: :csv), method: :get, class: 'report-btn csv-btn'  %>
-</div>
-
-<table id='batch-report' class='table-dark'>
-  <thead>
+<table id='batch-report' class='table'>
+  <thead class='thead-dark'>
     <th scope='col' >ID</th>
     <th scope='col' >Color</th>
     <th scope='col' >Price Sold</th>
@@ -26,10 +20,3 @@
     <% end %>
   </tbody>
 </table>
-
-<!-- * size
-* color
-* status - sellable, not sellable, sold, clearanced
-* price sold
-* date sold
- -->

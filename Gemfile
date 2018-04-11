@@ -6,7 +6,8 @@ gem "sass-rails"
 gem "uglifier"
 gem "coffee-rails"
 gem "jquery-rails"
-gem "bootstrap-sass"
+gem 'sprockets-rails'
+gem "bootstrap"
 
 group :test, :development do
   gem "rspec-rails"
