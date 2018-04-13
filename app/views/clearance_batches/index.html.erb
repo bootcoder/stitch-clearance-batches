@@ -1,16 +1,35 @@
 <h2></h2>
 
 <div class='container text-right'>
-  <%= form_tag(clearance_batches_path, multipart: true, class: 'form col-md-12', role: 'form') do %>
-    <div class="form-group">
-      <%= label_tag 'item_id', 'Clearance individual item' %>
-      <%= text_field_tag 'item_id', nil, placeholder: '(single item csv)', class: 'form-control', autofocus: true %>
-      <%= label_tag 'csv_file', 'Or upload CSV batch file' %>
-      <%= file_field_tag 'csv_file', class: 'form-control' %>
-    </div>
-    <%= button_tag 'Clearance!', class: 'btn btn-primary' %>
-    <!-- Form Continues into In Progress batches -->
+
+  <div class='row'>
+    <%= form_with url: clearance_batches_path, multipart: true, class: 'form col-md-12', role: 'form' do |f| %>
+      <div class='row'>
+        <div class='form-group col-md-6'>
+          <%= f.label 'item_id', 'Clearance a single item into a batch', class: 'col-form-label' %>
+          <%= f.text_field 'item_id', class: 'form-control', placeholder: 'Single Item ID', autofocus: true %>
+          <% if @in_progress_batches.any? %>
+            <%= f.select 'batch_id', options_from_collection_for_select(@in_progress_batches, :id, :title, @in_progress_batches.first.id.to_s), {}, {include_blank: 'New Batch', class: 'form-control'} %>
+          <% else %>
+            <%= f.select 'batch_id', ['New Batch'], {}, {class: 'form-control'} %>
+          <% end %>
+        </div>
+        <div class='form-group col-md-6'>
+          <%= f.label 'csv_file', 'Or upload a CSV batch file', class: 'col-form-label' %>
+          <%= f.file_field 'csv_file', class: 'form-control' %>
+          <%= f.submit 'Clearance!', class: 'form-control btn btn-primary' %>
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class='container'>
+  <div class='row text-center'>
     <%= render partial: 'in_progress_batches' %>
-  <% end %>
-  <%= render partial: 'clearance_batches' %>
+  </div>
+  <div class='row'>
+    <%= render partial: 'clearance_batches' %>
+  </div>
 </div>

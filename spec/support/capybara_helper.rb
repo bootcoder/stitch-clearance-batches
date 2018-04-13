@@ -12,17 +12,20 @@ module CapybaraHelper
     self
   end
 
-  def upload_single_item
+  def upload_single_item(item = Item.first)
     visit '/'
     within('table.clearance_batches') do
       expect(page).not_to have_content(/Clearance Batch \d+/)
+      expect(page).not_to have_content(/In Progress Batch \d+/)
     end
-    fill_in('item_id', with: '1')
+    fill_in('item_id', with: item.id)
     click_button 'Clearance!'
-    within('table.open_batches') do
+    within('table.in_progress_batches') do
+      # This hard coding of elements seems hacky, would love some advice on a better approach.
       expect(page.all('tr').count).to eq 2
       expect(page.all('tr')[1].all('td')[2]).to have_content "1"
-      expect(page).to have_content "Open Batch #{ClearanceBatch.last.id}"
+      expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
+      expect(page).to have_content("Item #{item.id} Clearanced Successfully!")
     end
     self
   end
