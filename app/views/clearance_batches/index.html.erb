@@ -1,12 +1,20 @@
-<h2>Clearance Batches</h2>
+<h2></h2>
 
-<%= form_tag(clearance_batches_path, multipart: true, class: 'form-inline', role: 'form') do %>
-  <div class="form-group">
-    <%= label_tag 'csv_batch_file', 'Select batch file' %>
-    <%= file_field_tag 'csv_batch_file', class: 'form-control' %>
+<div class='container text-right'>
+  <div class='row'>
+    <%= form_tag(clearance_batches_path, multipart: true, class: 'form col-md-12', role: 'form') do %>
+      <div class="form-group">
+        <%= label_tag 'clearance_item', 'Clearance individual item' %>
+        <%= text_field_tag 'clearance_item', nil, placeholder: '(single item csv)', class: 'form-control' %>
+        <%= label_tag 'csv_batch_file', 'Or upload CSV batch file' %>
+        <%= file_field_tag 'csv_batch_file', class: 'form-control' %>
+      </div>
+      <%= button_tag 'Clearance!', class: 'btn btn-primary' %>
+    <% end %>
   </div>
-  <%= button_tag 'upload batch file', class: 'btn btn-primary' %>
-<% end %>
+</div>
+
+<h2>Completed Clearance Batches</h2>
 
 <table class="table table-striped clearance_batches">
   <thead class='text-center'>

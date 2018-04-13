@@ -12,7 +12,6 @@ describe "clearance_batch" do
 
       it "displays a list of all past clearance batches" do
         visit "/"
-        expect(page).to have_content("Stitch Fix Clearance Tool")
         expect(page).to have_content("Clearance Batches")
         within('table.clearance_batches') do
           expect(page).to have_content("Clearance Batch #{clearance_batch_1.id}")
@@ -41,6 +40,21 @@ describe "clearance_batch" do
       end
     end
 
+    describe 'add a new clearance item' do
+      let!(:csv_item) { generate_item_csv_row(FactoryGirl.create(:item, color: 'gumdrop-glow')) }
+
+      context 'total success' do
+        it 'should allow a user to clearance a single item successfully' do
+          upload_item
+          expect(ClearanceBatch.last.items).to include csv_item
+        end
+      end
+
+      context 'total failure' do
+
+      end
+
+    end
 
     describe "add a new clearance batch" do
 
@@ -49,12 +63,7 @@ describe "clearance_batch" do
         it "should allow a user to upload a new clearance batch successfully" do
           items = 5.times.map{ FactoryGirl.create(:item) }
           file_name = generate_csv_file(items)
-          visit "/"
-          within('table.clearance_batches') do
-            expect(page).not_to have_content(/Clearance Batch \d+/)
-          end
-          attach_file("Select batch file", file_name)
-          click_button "upload batch file"
+          upload_batch_file(file_name)
           new_batch = ClearanceBatch.first
           expect(page).to have_content("#{items.count} items clearanced in batch #{new_batch.id}")
           expect(page).not_to have_content("item ids raised errors and were not clearanced")
@@ -71,12 +80,7 @@ describe "clearance_batch" do
           valid_items   = 3.times.map{ FactoryGirl.create(:item) }
           invalid_items = [[987654], ['no thanks']]
           file_name     = generate_csv_file(valid_items + invalid_items)
-          visit "/"
-          within('table.clearance_batches') do
-            expect(page).not_to have_content(/Clearance Batch \d+/)
-          end
-          attach_file("Select batch file", file_name)
-          click_button "upload batch file"
+          upload_batch_file(file_name)
           new_batch = ClearanceBatch.first
           expect(page).to have_content("#{valid_items.count} items clearanced in batch #{new_batch.id}")
           expect(page).to have_content("#{invalid_items.count} item ids raised errors and were not clearanced")
@@ -90,14 +94,9 @@ describe "clearance_batch" do
       context "total failure" do
 
         it "should allow a user to upload a new clearance batch that totally fails to be clearanced" do
-          invalid_items = [[987654], ['no thanks']]
+          invalid_items = [[8675309], ['no thanks']]
           file_name     = generate_csv_file(invalid_items)
-          visit "/"
-          within('table.clearance_batches') do
-            expect(page).not_to have_content(/Clearance Batch \d+/)
-          end
-          attach_file("Select batch file", file_name)
-          click_button "upload batch file"
+          upload_batch_file(file_name)
           expect(page).not_to have_content("items clearanced in batch")
           expect(page).to have_content("No new clearance batch was added")
           expect(page).to have_content("#{invalid_items.count} item ids raised errors and were not clearanced")
@@ -129,7 +128,6 @@ describe "clearance_batch" do
         visit "/clearance_batches/#{batch_1.id}.pdf"
         expect(page.response_headers).to have_content("clearance_batch_#{batch_1.id}.pdf")
         pdf_to_pdf # CapybaraHelper - parse PDF => page @body
-        expect(page.body).to have_content("Clearance Batch #{batch_1.id} Report:")
         expect(page.body.count('$')).to eq batch_1.items.count
       end
 
@@ -172,6 +170,8 @@ describe "clearance_batch" do
         within('table#batch-report') do
           expect(page.all('tr').count).to eq 5
           expect(page).to have_content(batch_1.items.first.price_sold.to_f)
+          expect(page.body).to have_content("Clearance Batch Report:")
+          expect(page.body).to have_content("Batch ID: #{batch_1.id}")
         end
       end
 
@@ -202,7 +202,6 @@ describe "clearance_batch" do
           expect(page.body).to have_content(batch_1.items.first.attributes.values.join(','))
         end
       end
-
 
     end
   end
