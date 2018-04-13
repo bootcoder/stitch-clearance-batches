@@ -4,15 +4,44 @@
   <div class='row'>
     <%= form_tag(clearance_batches_path, multipart: true, class: 'form col-md-12', role: 'form') do %>
       <div class="form-group">
-        <%= label_tag 'clearance_item', 'Clearance individual item' %>
-        <%= text_field_tag 'clearance_item', nil, placeholder: '(single item csv)', class: 'form-control' %>
-        <%= label_tag 'csv_batch_file', 'Or upload CSV batch file' %>
-        <%= file_field_tag 'csv_batch_file', class: 'form-control' %>
+        <%= label_tag 'item_id', 'Clearance individual item' %>
+        <%= text_field_tag 'item_id', nil, placeholder: '(single item csv)', class: 'form-control' %>
+        <%= label_tag 'csv_file', 'Or upload CSV batch file' %>
+        <%= file_field_tag 'csv_file', class: 'form-control' %>
       </div>
       <%= button_tag 'Clearance!', class: 'btn btn-primary' %>
     <% end %>
   </div>
 </div>
+
+<h2>Open Clearance Batches</h2>
+<table class="table table-striped open_batches">
+  <thead class='text-center'>
+    <tr>
+      <th>&nbsp;</th>
+      <th scope='col' >ID</th>
+      <th scope='col' >Date clearanced</th>
+      <th scope='col' >Number of items clearanced</th>
+      <th scope='col' >Reports</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @open_batches.each do |open_batch| -%>
+      <tr class='batch-row text-center'>
+        <td><input type="radio" id="open_batch_<%= open_batch.id %>_radio" class="open_batch_radio" ></td>
+        <td scope='row'>Open Batch <%= open_batch.id %></td>
+        <td><%= l(open_batch.created_at, format: :short) %></td>
+        <td><%= open_batch.items.count %></td>
+        <td>
+          <div class='btn-group'>
+            <%= button_to "HTML", clearance_batch_path(open_batch), method: :get, class: 'report-btn html-btn btn btn-secondary'  %>
+            <%= button_to "Close", '#', method: :put, class: 'report-btn pdf-btn btn btn-warning'  %>
+          </div>
+        </td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>
 
 <h2>Completed Clearance Batches</h2>
 
