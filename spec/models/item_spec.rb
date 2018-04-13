@@ -6,8 +6,21 @@ describe Item do
     it { should allow_value('M').for(:size)}
     it { should allow_value('Blue').for(:color)}
     it { should allow_value('sellable').for(:status)}
-    it { should allow_value(10).for(:price_sold)}
+    it { should allow_value(10.0).for(:price_sold)}
     it { should allow_value(DateTime.now).for(:sold_at)}
+
+    it { should validate_presence_of :size}
+    it { should validate_presence_of :color}
+    it { should validate_presence_of :status}
+
+    it 'should have constant CLEARANCE_PRICE_PERCENTAGE' do
+      expect(Item).to have_constant(:CLEARANCE_PRICE_PERCENTAGE)
+    end
+  end
+
+  describe 'associations' do
+    it { should belong_to :style }
+    it { should belong_to :clearance_batch }
   end
 
   describe "#perform_clearance!" do

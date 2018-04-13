@@ -5,6 +5,8 @@ class Item < ActiveRecord::Base
   belongs_to :style
   belongs_to :clearance_batch, optional: true
 
+  validates_presence_of :size, :color, :status
+
   scope :sellable, -> { where(status: 'sellable') }
 
   def clearance!
