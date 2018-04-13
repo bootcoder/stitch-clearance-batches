@@ -16,17 +16,29 @@ class ClearancingService
     clearance_items!(clearancing_status)
   end
 
+  def process_item(item_id, batch)
+    clearancing_status      = create_clearancing_status
+    clearancing_status.batch = batch if batch
+    item_id = item_id.to_i
+    clearancing_error = what_is_the_clearancing_error?(item_id)
+    if clearancing_error
+      clearancing_status.errors << clearancing_error
+    else
+      clearancing_status.item_ids_to_clearance << item_id
+    end
+    clearance_items!(clearancing_status)
+  end
+
 private
 
   def clearance_items!(clearancing_status)
     if clearancing_status.item_ids_to_clearance.any?
       Item.transaction do
-        clearancing_status.clearance_batch.open = false
-        clearancing_status.clearance_batch.save!
+        clearancing_status.batch.save!
         clearancing_status.item_ids_to_clearance.each do |item_id|
           item = Item.find(item_id)
           item.clearance!
-          clearancing_status.clearance_batch.items << item
+          clearancing_status.batch.items << item
         end
       end
     end
@@ -37,9 +49,17 @@ private
     if potential_item_id.blank? || potential_item_id == 0 || !potential_item_id.is_a?(Integer)
       return "Item id #{potential_item_id} is not valid"
     end
-    if Item.where(id: potential_item_id).none?
+
+    potential_item = Item.find_by(id: potential_item_id)
+
+    if potential_item && potential_item.status == 'clearanced'
+      return "Item #{potential_item_id} already clearanced"
+    end
+
+    if !potential_item
       return "Item id #{potential_item_id} could not be found"
     end
+
     if Item.sellable.where(id: potential_item_id).none?
       return "Item id #{potential_item_id} could not be clearanced"
     end
@@ -50,7 +70,7 @@ private
 
   def create_clearancing_status
     OpenStruct.new(
-      clearance_batch: ClearanceBatch.new,
+      batch: ClearanceBatch.new,
       item_ids_to_clearance: [],
       errors: [])
   end
