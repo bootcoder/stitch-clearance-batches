@@ -75,52 +75,53 @@ describe "clearance_batch" do
 
         it 'to same batch' do
           upload_single_item
-          within('table.open_batches') do
-            btn = find("#open_batch_#{Item.first.id}_radio")
+          within('table.in_progress_batches') do
+            binding.pry
+            btn = find("#in_progress_batch_#{Item.first.id}_radio")
             choose(btn)
           end
           fill_in('item_id', with: '2')
           click_button 'Clearance!'
-          within('table.open_batches') do
+          within('table.in_progress_batches') do
             expect(page.all('tr').count).to eq 2
             expect(page.all('tr')[1].all('td')[2]).to have_content "2"
-            expect(page).to have_content "Open Batch #{ClearanceBatch.last.id}"
+            expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
           end
         end
 
         it 'to new batch' do
           upload_single_item
-          within('table.open_batches') do
+          within('table.in_progress_batches') do
             btn = find("#new_batch_radio")
             choose(btn)
           end
           fill_in('item_id', with: '2')
           click_button 'Clearance!'
-          within('table.open_batches') do
+          within('table.in_progress_batches') do
             expect(page.all('tr').count).to eq 3
             expect(page.all('tr')[1].all('td')[2]).to have_content "1"
             expect(page.all('tr')[2].all('td')[2]).to have_content "1"
-            expect(page).to have_content "Open Batch #{ClearanceBatch.first.id}"
-            expect(page).to have_content "Open Batch #{ClearanceBatch.last.id}"
+            expect(page).to have_content "In Progress Batch #{ClearanceBatch.first.id}"
+            expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
           end
         end
 
         it 'to different batch' do
-          other_batch = FactoryBot.create(:open_batch)
+          other_batch = FactoryBot.create(:in_progress_batch)
           upload_single_item
 
-          within('table.open_batches') do
+          within('table.in_progress_batches') do
             btn = find("#new_batch_radio")
             choose(btn)
           end
           fill_in('item_id', with: '2')
           click_button 'Clearance!'
-          within('table.open_batches') do
+          within('table.in_progress_batches') do
             expect(page.all('tr').count).to eq 3
             expect(page.all('tr')[1].all('td')[2]).to have_content "1"
             expect(page.all('tr')[2].all('td')[2]).to have_content "1"
-            expect(page).to have_content "Open Batch #{ClearanceBatch.first.id}"
-            expect(page).to have_content "Open Batch #{ClearanceBatch.last.id}"
+            expect(page).to have_content "In Progress Batch #{ClearanceBatch.first.id}"
+            expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
           end
         end
 

@@ -68,7 +68,7 @@ describe ClearanceBatchesController, type: :controller do
 
 
     context "single item" do
-      it "clearances item without batch given, creates a batch" do
+      it "creates a batch, clearances item" do
         expect(ClearanceBatch.count).to eq 0
         expect(items.first.status).to eq 'sellable'
 

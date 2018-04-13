@@ -1,0 +1,27 @@
+<h2>Completed Clearance Batches</h2>
+<table class="table table-striped clearance_batches">
+  <thead class='text-center'>
+    <tr>
+      <th scope='col' >ID</th>
+      <th scope='col' >Date clearanced</th>
+      <th scope='col' >Number of items clearanced</th>
+      <th scope='col' >Reports</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @clearance_batches.each do |clearance_batch| -%>
+      <tr class='batch-row text-center'>
+        <td scope='row'>Clearance Batch <%= clearance_batch.id %></td>
+        <td><%= l(clearance_batch.created_at, format: :short) %></td>
+        <td><%= clearance_batch.items.count %></td>
+        <td>
+          <div class='btn-group'>
+            <%= button_to "HTML", clearance_batch_path(clearance_batch), method: :get, class: 'report-btn html-btn btn btn-secondary'  %>
+            <%= button_to "PDF", clearance_batch_path(clearance_batch, format: :pdf), method: :get, class: 'report-btn pdf-btn btn btn-secondary'  %>
+            <%= button_to "CSV", clearance_batch_path(clearance_batch, format: :csv), method: :get, class: 'report-btn csv-btn btn btn-secondary'  %>
+          </div>
+        </td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>
