@@ -47,7 +47,6 @@ describe "clearance_batch" do
       context 'VALID INPUT' do
         it 'allows a user to clearance a single item successfully' do
           upload_single_item
-          expect(page).to have_content("Item #{single_item.id} Clearanced Successfully!")
           expect(ClearanceBatch.last.items).to include single_item
         end
       end
@@ -66,7 +65,13 @@ describe "clearance_batch" do
         end
 
         it "JS flashes error, does not alter DB" do
-          upload_invalid_item('<script>alert("ohhh noooo");</script>')
+          upload_invalid_item('<script>alert("bad internet, go to your room!");</script>')
+        end
+
+        it 'does not clearance duplicate items' do
+          upload_single_item
+          upload_single_item(single_item)
+          expect(page).to have_content "Item #{single_item.id} already clearanced"
         end
 
       end
@@ -76,7 +81,6 @@ describe "clearance_batch" do
         it 'to same batch' do
           upload_single_item
           within('table.in_progress_batches') do
-            binding.pry
             btn = find("#in_progress_batch_#{Item.first.id}_radio")
             choose(btn)
           end

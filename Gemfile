@@ -27,6 +27,8 @@ end
 gem 'extra_print'
 gem 'pry-rails'
 gem 'pry-byebug'
+gem 'better_errors'
+gem 'binding_of_caller'
 
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'

@@ -6,11 +6,13 @@ describe ClearanceBatchesController, type: :controller do
 
     let!(:batch_1) { FactoryBot.create(:clearance_batch_with_items)}
     let!(:batch_2) { FactoryBot.create(:clearance_batch_with_items)}
+    let!(:in_progress_batch) { FactoryBot.create(:in_progress_batch)}
 
     before(:each) { get :index }
 
     it "assigns all batches" do
       expect(assigns(:clearance_batches)).to eq [batch_1, batch_2]
+      expect(assigns(:in_progress_batches)).to eq [in_progress_batch]
     end
 
     it "renders the index template with 200" do
@@ -23,7 +25,6 @@ describe ClearanceBatchesController, type: :controller do
   describe 'SHOW' do
 
     let!(:batch_1) { FactoryBot.create(:clearance_batch_with_items)}
-    let!(:batch_2) { FactoryBot.create(:clearance_batch_with_items)}
 
     it "assigns the correct batch" do
       get :show, params: { id: batch_1 }
@@ -94,7 +95,9 @@ describe ClearanceBatchesController, type: :controller do
     end
 
     context "INVALID INPUT" do
-      it ""
+      it "" do
+
+      end
     end
   end
 
