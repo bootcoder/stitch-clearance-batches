@@ -12,12 +12,12 @@ module CapybaraHelper
     self
   end
 
-  def upload_item
+  def upload_single_item
     visit '/'
     within('table.clearance_batches') do
       expect(page).not_to have_content(/Clearance Batch \d+/)
     end
-    fill_in('clearance_item', with: '12345')
+    fill_in('clearance_item', with: '1')
     click_button 'Clearance!'
     self
   end

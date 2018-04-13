@@ -6,7 +6,7 @@ describe ClearancingService do
   describe "::process_file" do
 
     context "total success" do
-      let(:items)         { 5.times.map { FactoryGirl.create(:item) } }
+      let(:items)         { 5.times.map { FactoryBot.create(:item) } }
       let(:file_name)     { generate_csv_file(items) }
       let(:uploaded_file) { Rack::Test::UploadedFile.new(file_name) }
 
@@ -19,11 +19,11 @@ describe ClearancingService do
       end
 
       it "encounters no errors" do
-        expect(@clearancing_status.errors.empty?).to be true 
+        expect(@clearancing_status.errors.empty?).to be true
       end
 
       it "adds all the items to the batch" do
-        expect(@clearancing_status.clearance_batch.items.pluck(:id).sort).to eq(items.map(&:id).sort) 
+        expect(@clearancing_status.clearance_batch.items.pluck(:id).sort).to eq(items.map(&:id).sort)
       end
 
       it "sets all items to 'clearanced' status" do
@@ -32,8 +32,8 @@ describe ClearancingService do
     end
 
     context "partial success" do
-      let(:valid_items)       { 3.times.map { FactoryGirl.create(:item) } }
-      let(:unsellable_item)   { FactoryGirl.create(:item, status: 'clearanced') }
+      let(:valid_items)       { 3.times.map { FactoryBot.create(:item) } }
+      let(:unsellable_item)   { FactoryBot.create(:item, status: 'clearanced') }
       let(:non_existent_id)   { 987654 }
       let(:invalid_id)        { 'no thanks' }
       let(:no_id)             { nil }

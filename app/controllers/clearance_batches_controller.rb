@@ -43,8 +43,10 @@ class ClearanceBatchesController < ApplicationController
       end
     else
       batch = ClearanceBatch.create
-      @item = batch.items.new(clearance_params[:clearance_item])
-      if @item.save
+      @item = Item.find_by(id: params[:clearance_item])
+      if @item
+        @item.clearance!
+        batch.items << @item
         flash[:notice]  = "Item Clearanced Successfully"
       else
         alert_messages << 'Thats how you know you fucked up...'

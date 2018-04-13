@@ -1,10 +1,20 @@
 require 'rails_helper'
 
 describe Item do
+
+  describe "attributes" do
+    it { should allow_value('M').for(:size)}
+    it { should allow_value('Blue').for(:color)}
+    it { should allow_value('sellable').for(:status)}
+    it { should allow_value(10).for(:price_sold)}
+    it { should allow_value(DateTime.now).for(:sold_at)}
+  end
+
   describe "#perform_clearance!" do
 
     let(:wholesale_price) { 100 }
-    let(:item) { FactoryGirl.create(:item, style: FactoryGirl.create(:style, wholesale_price: wholesale_price)) }
+    let(:item) { FactoryBot.create(:item, style: FactoryBot.create(:style, wholesale_price: wholesale_price)) }
+
     before do
       item.clearance!
       item.reload
