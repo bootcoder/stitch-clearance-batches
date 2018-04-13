@@ -6,9 +6,9 @@ describe "clearance_batch" do
 
     describe "see previous clearance batches" do
 
-      let!(:clearance_batch_1) { FactoryGirl.create(:clearance_batch) }
-      let!(:clearance_batch_2) { FactoryGirl.create(:clearance_batch) }
-      let!(:clearance_batch_3) { FactoryGirl.create(:clearance_batch) }
+      let!(:clearance_batch_1) { FactoryBot.create(:clearance_batch) }
+      let!(:clearance_batch_2) { FactoryBot.create(:clearance_batch) }
+      let!(:clearance_batch_3) { FactoryBot.create(:clearance_batch) }
 
       it "displays a list of all past clearance batches" do
         visit "/"
@@ -23,7 +23,7 @@ describe "clearance_batch" do
     end
 
     describe 'displays report links in previous batches' do
-      let!(:batch_1) {FactoryGirl.create(:clearance_batch_with_items)}
+      let!(:batch_1) {FactoryBot.create(:clearance_batch_with_items)}
 
       it "Batch has links to generate reports" do
         visit "/"
@@ -41,12 +41,12 @@ describe "clearance_batch" do
     end
 
     describe 'add a new clearance item' do
-      let!(:csv_item) { generate_item_csv_row(FactoryGirl.create(:item, color: 'gumdrop-glow')) }
+      let!(:single_item) { FactoryBot.create(:item, color: 'gumdrop-glow') }
 
       context 'total success' do
         it 'should allow a user to clearance a single item successfully' do
-          upload_item
-          expect(ClearanceBatch.last.items).to include csv_item
+          upload_single_item
+          expect(ClearanceBatch.last.items).to include single_item
         end
       end
 
@@ -61,7 +61,7 @@ describe "clearance_batch" do
       context "total success" do
 
         it "should allow a user to upload a new clearance batch successfully" do
-          items = 5.times.map{ FactoryGirl.create(:item) }
+          items = 5.times.map{ FactoryBot.create(:item) }
           file_name = generate_csv_file(items)
           upload_batch_file(file_name)
           new_batch = ClearanceBatch.first
@@ -77,7 +77,7 @@ describe "clearance_batch" do
       context "partial success" do
 
         it "should allow a user to upload a new clearance batch partially successfully, and report on errors" do
-          valid_items   = 3.times.map{ FactoryGirl.create(:item) }
+          valid_items   = 3.times.map{ FactoryBot.create(:item) }
           invalid_items = [[987654], ['no thanks']]
           file_name     = generate_csv_file(valid_items + invalid_items)
           upload_batch_file(file_name)
@@ -110,8 +110,8 @@ describe "clearance_batch" do
 
   describe 'SHOW', type: :feature do
 
-    let!(:batch_1) {FactoryGirl.create(:clearance_batch_with_items)}
-    let!(:batch_2) {FactoryGirl.create(:clearance_batch_with_items)}
+    let!(:batch_1) {FactoryBot.create(:clearance_batch_with_items)}
+    let!(:batch_2) {FactoryBot.create(:clearance_batch_with_items)}
 
     context 'PDF' do
 

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :clearance_batch do
     factory :clearance_batch_with_items do
