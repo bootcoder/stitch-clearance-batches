@@ -3,6 +3,103 @@ require 'rails_helper'
 describe ClearancingService do
   subject(:clearancing_service) { ClearancingService.new }
 
+  describe "::process_item" do
+
+    context "total success new batch" do
+      let(:item) { FactoryBot.create(:item) }
+      before(:each) { @clearancing_status = clearancing_service.process_item(item.id, nil) }
+
+      it "creates a clearance batch" do
+        expect(@clearancing_status.batch.new_record?).to be false
+      end
+
+      it "encounters no errors" do
+        expect(@clearancing_status.errors.empty?).to be true
+      end
+
+      it "adds all the items to the batch" do
+        expect(@clearancing_status.batch.items.pluck(:id).first).to eq item.id
+      end
+
+      it "sets all items to 'clearanced' status" do
+        expect(@clearancing_status.batch.items.first.status).to eq("clearanced")
+      end
+    end
+
+    context "total success existing batch" do
+      let(:batch) { FactoryBot.create(:clearance_batch) }
+      let(:item) { FactoryBot.create(:item) }
+      before(:each) { @clearancing_status = clearancing_service.process_item(item.id, batch) }
+
+      it "encounters no errors" do
+        expect(@clearancing_status.errors.empty?).to be true
+      end
+
+      it "adds all the items to the batch" do
+        expect(@clearancing_status.batch.items.pluck(:id).first).to eq item.id
+      end
+
+      it "sets all items to 'clearanced' status" do
+        expect(@clearancing_status.batch.items.first.status).to eq("clearanced")
+      end
+    end
+
+    context "total failure with batch" do
+      let!(:item) { FactoryBot.create(:item) }
+      let!(:batch) { FactoryBot.create(:clearance_batch) }
+
+      it 'handles invalid input' do
+        @clearancing_status = clearancing_service.process_item('A', batch)
+        expect(@clearancing_status.errors).to include "Item id 0 is not valid"
+      end
+
+      it 'handles item not found' do
+        @clearancing_status = clearancing_service.process_item(1234, batch)
+        expect(@clearancing_status.errors).to include "Item id 1234 could not be found"
+      end
+
+      it 'handles an item already clearanced' do
+        existing_item = FactoryBot.create(:clearance_item)
+        @clearancing_status = clearancing_service.process_item(existing_item.id, batch)
+        expect(@clearancing_status.errors).to include "Item id #{existing_item.id} already clearanced"
+      end
+
+      it 'handles an item not sellable' do
+        sold_item = FactoryBot.create(:item, status: 'sold')
+        @clearancing_status = clearancing_service.process_item(sold_item.id, batch)
+        expect(@clearancing_status.errors).to include "Item id #{sold_item.id} could not be clearanced"
+      end
+
+    end
+
+    context "total failure without batch" do
+      let!(:item) { FactoryBot.create(:item) }
+
+      it 'handles invalid input' do
+        @clearancing_status = clearancing_service.process_item('A', nil)
+        expect(@clearancing_status.errors).to include "Item id 0 is not valid"
+      end
+
+      it 'handles item not found' do
+        @clearancing_status = clearancing_service.process_item(1234, nil)
+        expect(@clearancing_status.errors).to include "Item id 1234 could not be found"
+      end
+
+      it 'handles an item already clearanced' do
+        existing_item = FactoryBot.create(:clearance_item)
+        @clearancing_status = clearancing_service.process_item(existing_item.id, nil)
+        expect(@clearancing_status.errors).to include "Item id #{existing_item.id} already clearanced"
+      end
+
+      it 'handles an item not sellable' do
+        sold_item = FactoryBot.create(:item, status: 'sold')
+        @clearancing_status = clearancing_service.process_item(sold_item.id, nil)
+        expect(@clearancing_status.errors).to include "Item id #{sold_item.id} could not be clearanced"
+      end
+
+    end
+  end
+
   describe "::process_file" do
 
     context "total success" do
@@ -15,7 +112,7 @@ describe ClearancingService do
       end
 
       it "creates a clearance batch" do
-        expect(@clearancing_status.clearance_batch.new_record?).to be false
+        expect(@clearancing_status.batch.new_record?).to be false
       end
 
       it "encounters no errors" do
@@ -23,11 +120,11 @@ describe ClearancingService do
       end
 
       it "adds all the items to the batch" do
-        expect(@clearancing_status.clearance_batch.items.pluck(:id).sort).to eq(items.map(&:id).sort)
+        expect(@clearancing_status.batch.items.pluck(:id).sort).to eq(items.map(&:id).sort)
       end
 
       it "sets all items to 'clearanced' status" do
-        expect(@clearancing_status.clearance_batch.items.pluck(:status).uniq).to eq(["clearanced"])
+        expect(@clearancing_status.batch.items.pluck(:status).uniq).to eq(["clearanced"])
       end
     end
 
@@ -60,11 +157,11 @@ describe ClearancingService do
         end
         expect(@clearancing_status.errors).to include("Item id #{non_existent_id} could not be found")
         expect(@clearancing_status.errors).to include("Item id #{float_id.to_i} could not be found")
-        expect(@clearancing_status.errors).to include("Item id #{unsellable_item.id} could not be clearanced")
+        expect(@clearancing_status.errors).to include("Item id #{unsellable_item.id} already clearanced")
       end
 
       it "includes all valid items in the batch" do
-        expect(@clearancing_status.clearance_batch.items.pluck(:id)).to eq(valid_items.map(&:id))
+        expect(@clearancing_status.batch.items.pluck(:id)).to eq(valid_items.map(&:id))
       end
     end
 
@@ -81,7 +178,7 @@ describe ClearancingService do
         expect(@clearancing_status.errors.count).to eq(invalid_items.count)
       end
       it "should not create a new ClearanceBatch" do
-        expect(@clearancing_status.clearance_batch.new_record?).to be true
+        expect(@clearancing_status.batch.new_record?).to be true
       end
     end
   end

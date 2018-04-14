@@ -50,15 +50,43 @@ describe ClearanceBatchesController, type: :controller do
   end
 
   describe "UPDATE" do
-    let!(:batch_1) {FactoryBot.create(:in_progress_batch)}
-    it "closes a batch" do
-      put :update, params: { id: batch_1 }
-      expect(response).to have_http_status(302)
-      expect(response).to redirect_to(action: :index)
+
+    context "closes a batch and flashes success" do
+      let!(:batch) {FactoryBot.create(:in_progress_batch)}
+      before(:each) { put :update, params: { id: batch, close_batch: '' } }
+
+      it { should set_flash[:notice].to "Clearance Batch #{batch.id} successfully closed" }
+
+      it 'renders correctly' do
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(action: :index)
+      end
+
+      it "closes the batch" do
+        expect(ClearanceBatch.find(batch.id).in_progress).to eq false
+      end
     end
 
-    it "fails to update a previously closed batch" do
+    context "does not update a previously closed batch" do
+      let!(:closed_batch) { FactoryBot.create(:clearance_batch_with_items)}
+      before(:each) { put :update, params: { id: closed_batch, close_batch: '' } }
+      it { should set_flash[:alert].to "Batch id #{closed_batch.id} is already closed" }
+    end
 
+    context "fails to update without close_batch param" do
+      let!(:batch) { FactoryBot.create(:in_progress_batch)}
+      before(:each) { put :update, params: { id: batch} }
+      it { should set_flash[:alert].to "Failed to update batch #{batch.id}, refresh and try again." }
+    end
+
+    context "handles INVALID INPUT correctly" do
+      before(:each) { put :update, params: { id: 'fluzinsinks', close_batch: '' } }
+      it { should set_flash[:alert].to "Could not find batch id fluzinsinks" }
+    end
+
+    context "handles batch not found correctly" do
+      before(:each) { put :update, params: { id: 720, close_batch: '' } }
+      it { should set_flash[:alert].to "Could not find batch id 720" }
     end
 
   end
@@ -72,6 +100,10 @@ describe ClearanceBatchesController, type: :controller do
 
       before(:each) { post :create, params: { csv_file: file } }
 
+      it { should set_flash[:notice] }
+      it { should set_flash[:alert] }
+      it { should redirect_to action: :index}
+
       it "creates a new batch" do
         expect(ClearanceBatch.count).to eq 1
       end
@@ -81,9 +113,8 @@ describe ClearanceBatchesController, type: :controller do
       end
     end
 
-
     context "single item" do
-      it "creates a batch, clearances item" do
+      it "creates a batch when new batch given, clearances item" do
         expect(ClearanceBatch.count).to eq 0
         expect(items.first.status).to eq 'sellable'
 
@@ -107,12 +138,39 @@ describe ClearanceBatchesController, type: :controller do
       end
     end
 
-    # Already coving this pretty well in features. May come back...
-    # context "INVALID INPUT" do
-    #   it "" do
+    context 'params' do
+      it { should permit(:item_id, :batch_id, :csv_file, :close_batch).for(:create) }
+    end
 
-    #   end
-    # end
+    context "unmet param dependency alerts user" do
+      before(:each) { post :create, params: { item_id: 6081279 } }
+      it { should set_flash[:alert].to "You must enter an Item id or CSV file to clearance items" }
+    end
+
+    context "invalid ID" do
+      before(:each) { post :create, params: { item_id: 6081279, batch_id: '' } }
+      it { should set_flash[:alert].to "Item id 6081279 could not be found" }
+
+      it 'should not alter Item count' do
+        expect(Item.count).to eq 5
+      end
+
+      it 'should not alter ClearanceBatch count' do
+        expect(ClearanceBatch.count).to eq 0
+      end
+    end
+
+    context 'invalid batch ID' do
+      before(:each) { post :create, params: { item_id: 1, batch_id: 978 } }
+      it { should set_flash[:notice].to "Item 1 Clearanced Successfully!" }
+      it "creates a new batch" do
+        expect(ClearanceBatch.count).to eq 1
+      end
+      it "clearances item" do
+        expect(Item.find(1).status).to eq 'clearanced'
+      end
+    end
+
   end
 
 end
