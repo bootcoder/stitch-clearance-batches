@@ -65,15 +65,12 @@ class ClearanceBatchesController < ApplicationController
       else
         alert_messages << "No new clearance batch was added"
       end
-
     end
-      flash[:alert] = alert_messages.join("<br/>") if alert_messages.any?
-      flash[:notice] = notice_messages.join("<br/>") if notice_messages.any?
-      redirect_to action: :index
-    # respond_to do |format|
-    #   format.html { }
-    #   format.js
-    # end
+
+    flash[:alert] = alert_messages.join("<br/>") if alert_messages.any?
+    flash[:notice] = notice_messages.join("<br/>") if notice_messages.any?
+    redirect_to action: :index
+
   end
 
   private

@@ -7,6 +7,15 @@
   background-color: palegreen;
 }
 
+.completed_batches_container {
+  border: 2px solid palegreen;
+}
+
+.in_progress_batches_container {
+  border: 2px solid sandybrown;
+  margin-bottom: 15px;
+}
+
 #in_progress_batches_title {
   padding: 1%;
   background-color: sandybrown;
