@@ -32,6 +32,10 @@ class ClearanceBatchesController < ApplicationController
   end
 
   def create
+    respond_to do |format|
+      format.html
+      format.js { ep }
+    end
     alert_messages     = []
 
     if clearance_params[:csv_file]
