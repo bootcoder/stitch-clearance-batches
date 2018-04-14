@@ -49,6 +49,20 @@ describe ClearanceBatchesController, type: :controller do
 
   end
 
+  describe "UPDATE" do
+    let!(:batch_1) {FactoryBot.create(:in_progress_batch)}
+    it "closes a batch" do
+      put :update, params: { id: batch_1 }
+      expect(response).to have_http_status(302)
+      expect(response).to redirect_to(action: :index)
+    end
+
+    it "fails to update a previously closed batch" do
+
+    end
+
+  end
+
   describe "CREATE" do
 
     let!(:items) { 5.times.map{ FactoryBot.create(:item) } }
