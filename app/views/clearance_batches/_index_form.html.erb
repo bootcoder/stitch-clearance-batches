@@ -1,0 +1,18 @@
+ <div class='row'>
+  <%= form_with url: clearance_batches_path, multipart: true, class: 'form col-md-12', role: 'form' do |f| %>
+    <div class='row'>
+      <div class='form-group col-md-6'>
+        <%= f.text_field 'item_id', class: 'form-control', placeholder: 'Single Item ID', autofocus: true %>
+        <%= f.file_field 'csv_file', class: 'form-control-file form-control', accept: 'text/csv' %>
+      </div>
+      <div class='form-group col-md-6'>
+        <% if @in_progress_batches.any? %>
+        <%= f.select 'batch_id', options_from_collection_for_select(@in_progress_batches, :id, :title, @in_progress_batches.first.id.to_s), {include_blank: 'New Batch'}, {class: 'form-control'} %>
+        <% else %>
+        <%= f.select 'batch_id', ['New Batch'], {}, {class: 'form-control'} %>
+        <% end %>
+        <%= f.submit 'Clearance!', class: 'form-control btn btn-success' %>
+      </div>
+    </div>
+  <% end %>
+</div>

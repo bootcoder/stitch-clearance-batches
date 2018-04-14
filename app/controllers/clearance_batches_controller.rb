@@ -5,6 +5,10 @@ class ClearanceBatchesController < ApplicationController
   def index
     @in_progress_batches = ClearanceBatch.in_progress.order(updated_at: :desc)
     @clearance_batches  = ClearanceBatch.completed
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   def show
@@ -32,18 +36,15 @@ class ClearanceBatchesController < ApplicationController
   end
 
   def create
-    respond_to do |format|
-      format.html
-      format.js { ep }
-    end
     alert_messages     = []
+    notice_messages    = []
 
     if clearance_params[:csv_file]
       clearancing_status = ClearancingService.new.process_file(clearance_params[:csv_file].tempfile)
       batch    = clearancing_status.batch
       if batch.persisted?
-        batch.in_progress = false
-        flash[:notice]  = "#{batch.items.count} items clearanced in batch #{batch.id}"
+        batch.update_attributes(in_progress: false)
+        notice_messages << "#{batch.items.count} items clearanced in batch #{batch.id}"
       else
         alert_messages << "No new clearance batch was added"
       end
@@ -60,14 +61,19 @@ class ClearanceBatchesController < ApplicationController
       if clearancing_status.errors.any?
         clearancing_status.errors.each {|error| alert_messages << error }
       elsif batch.save
-        flash[:notice]  = "Item #{clearance_params[:item_id]} Clearanced Successfully!"
+        notice_messages << "Item #{clearance_params[:item_id]} Clearanced Successfully!"
       else
         alert_messages << "No new clearance batch was added"
       end
 
     end
-    flash[:alert] = alert_messages.join("<br/>") if alert_messages.any?
-    redirect_to action: :index
+      flash[:alert] = alert_messages.join("<br/>") if alert_messages.any?
+      flash[:notice] = notice_messages.join("<br/>") if notice_messages.any?
+      redirect_to action: :index
+    # respond_to do |format|
+    #   format.html { }
+    #   format.js
+    # end
   end
 
   private
