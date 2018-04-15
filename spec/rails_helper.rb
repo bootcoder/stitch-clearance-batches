@@ -41,6 +41,8 @@ RSpec.configure do |config|
 
   config.include CsvHelper
   config.include CapybaraHelper
+  config.include ClearanceBatchHelper
+  config.include ItemHelper
 
   config.use_transactional_fixtures = true
 
