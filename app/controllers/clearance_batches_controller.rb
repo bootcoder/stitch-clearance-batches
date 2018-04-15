@@ -1,5 +1,3 @@
-require 'csv'
-
 class ClearanceBatchesController < ApplicationController
 
   def index
