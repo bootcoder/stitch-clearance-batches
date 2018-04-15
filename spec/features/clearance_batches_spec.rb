@@ -288,7 +288,7 @@ describe "clearance_batch" do
         within('#report-header') do
           find('.csv-btn').click
           expect(page.body).to have_content(csv_headers(item).join(','))
-          expect(page.body).to have_content(batch_1.items.first.attributes.values.join(','))
+          expect(page.body).to have_content(csv_attrs(item).values.join(','))
         end
       end
 
