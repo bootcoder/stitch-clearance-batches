@@ -55,7 +55,7 @@ describe ClearanceBatchesController, type: :controller do
       let!(:batch) {FactoryBot.create(:in_progress_batch)}
       before(:each) { put :update, params: { id: batch, close_batch: '' } }
 
-      it { should set_flash[:notice].to "Clearance Batch #{batch.id} successfully closed" }
+      it { should set_flash[:notice].to include "Clearance Batch #{batch.id} successfully closed" }
 
       it 'renders correctly' do
         expect(response).to have_http_status(302)
@@ -70,23 +70,23 @@ describe ClearanceBatchesController, type: :controller do
     context "does not update a previously closed batch" do
       let!(:closed_batch) { FactoryBot.create(:clearance_batch_with_items)}
       before(:each) { put :update, params: { id: closed_batch, close_batch: '' } }
-      it { should set_flash[:alert].to "Batch id #{closed_batch.id} is already closed" }
+      it { should set_flash[:alert].to include "Batch id #{closed_batch.id} is already closed" }
     end
 
     context "fails to update without close_batch param" do
       let!(:batch) { FactoryBot.create(:in_progress_batch)}
       before(:each) { put :update, params: { id: batch} }
-      it { should set_flash[:alert].to "Failed to update batch #{batch.id}, refresh and try again." }
+      it { should set_flash[:alert].to include "Failed to update batch #{batch.id}, refresh and try again." }
     end
 
     context "handles INVALID INPUT correctly" do
       before(:each) { put :update, params: { id: 'fluzinsinks', close_batch: '' } }
-      it { should set_flash[:alert].to "Could not find batch id fluzinsinks" }
+      it { should set_flash[:alert].to include "Could not find batch id fluzinsinks" }
     end
 
     context "handles batch not found correctly" do
       before(:each) { put :update, params: { id: 720, close_batch: '' } }
-      it { should set_flash[:alert].to "Could not find batch id 720" }
+      it { should set_flash[:alert].to include "Could not find batch id 720" }
     end
 
   end
@@ -144,12 +144,12 @@ describe ClearanceBatchesController, type: :controller do
 
     context "unmet param dependency alerts user" do
       before(:each) { post :create, params: { item_id: 6081279 } }
-      it { should set_flash[:alert].to "You must enter an Item id or CSV file to clearance items" }
+      it { should set_flash[:alert].to include "You must enter an Item id or CSV file to clearance items" }
     end
 
     context "invalid ID" do
       before(:each) { post :create, params: { item_id: 6081279, batch_id: '' } }
-      it { should set_flash[:alert].to "Item id 6081279 could not be found" }
+      it { should set_flash[:alert].to include "Item id 6081279 could not be found" }
 
       it 'should not alter Item count' do
         expect(Item.count).to eq 5
@@ -162,7 +162,7 @@ describe ClearanceBatchesController, type: :controller do
 
     context 'invalid batch ID' do
       before(:each) { post :create, params: { item_id: 1, batch_id: 978 } }
-      it { should set_flash[:notice].to "Item 1 Clearanced Successfully!" }
+      it { should set_flash[:notice].to include "Item 1 Clearanced Successfully!" }
       it "creates a new batch" do
         expect(ClearanceBatch.count).to eq 1
       end

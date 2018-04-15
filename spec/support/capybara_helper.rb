@@ -4,7 +4,7 @@ module CapybaraHelper
 
   def upload_batch_file(file_name)
     visit "/"
-    within('table.clearance_batches') do
+    within('table.completed_batches') do
       expect(page.all('tr').count).to eq 1
       expect(page).not_to have_content(/Clearanced Batch \d+/)
     end
@@ -24,7 +24,7 @@ module CapybaraHelper
 
   def upload_first_item(item = Item.first)
     visit '/'
-    within('table.clearance_batches') do
+    within('table.completed_batches') do
       expect(page).not_to have_content(/Clearance Batch \d+/)
       expect(page).not_to have_content(/In Progress Batch \d+/)
     end

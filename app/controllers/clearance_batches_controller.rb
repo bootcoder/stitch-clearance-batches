@@ -1,24 +1,29 @@
 class ClearanceBatchesController < ApplicationController
 
+
+  # NOTE: Split batches into two groups for in_progress and completed
   def index
     @in_progress_batches = ClearanceBatch.in_progress.order(updated_at: :desc)
-    @clearance_batches  = ClearanceBatch.completed
+    @completed_batches  = ClearanceBatch.completed
+
     respond_to do |format|
       format.html
       format.js
     end
   end
 
+  # NOTE: All pdf / csv rendering called from here in the Show
   def show
     @clearance_batch = ClearanceBatch.includes(:items).find(params[:id])
+
     respond_to do |format|
       format.html
+      format.csv
       format.pdf do
         render pdf: "clearance_batch_#{@clearance_batch.id}",
                template: 'clearance_batches/_show.html.erb',
                title: "clearance_batch_#{@clearance_batch.id}"
       end
-      format.csv
     end
   end
 
@@ -27,62 +32,46 @@ class ClearanceBatchesController < ApplicationController
     # feel kinda icky about the nonRESTfullness but didn't feel
     # an Items controller was the solution either
 
-    alert_messages     = []
-    notice_messages    = []
+    service = ClearancingService.new(
+      file: clearance_params[:csv_file],
+      item_id: clearance_params[:item_id],
+      batch: ClearanceBatch.find_by(id: clearance_params[:batch_id]))
 
-    if clearance_params[:csv_file]
-
-      clearancing_status = ClearancingService.new.process_file(clearance_params[:csv_file].tempfile)
-      batch = clearancing_status.batch
-      if batch.persisted?
-        batch.update_attributes(in_progress: false)
-        notice_messages << "#{batch.items.count} items clearanced in batch #{batch.id}"
-      else
-        alert_messages << "No new clearance batch was added"
-      end
-      if clearancing_status.errors.any?
-        alert_messages << "#{clearancing_status.errors.count} item ids raised errors and were not clearanced"
-        clearancing_status.errors.each {|error| alert_messages << error }
-      end
-
-    elsif clearance_params[:batch_id]
-
-      clearancing_status = ClearancingService.new.process_item(
-        clearance_params[:item_id],
-        ClearanceBatch.find_by(id: clearance_params[:batch_id]))
-      batch = clearancing_status.batch
-      if clearancing_status.errors.any?
-        clearancing_status.errors.each {|error| alert_messages << error }
-      elsif batch.save
-        notice_messages << "Item #{clearance_params[:item_id]} Clearanced Successfully!"
-      else
-        alert_messages << "No new clearance batch was added"
-      end
-
-    else
-
-      alert_messages << "You must enter an Item id or CSV file to clearance items"
-
+    # CSV batches are automatically closed.
+    if service.batch.persisted? && clearance_params[:csv_file]
+      service.batch.update_attributes(in_progress: false)
     end
 
-    flash[:alert] = alert_messages.join("<br/>") if alert_messages.any?
-    flash[:notice] = notice_messages.join("<br/>") if notice_messages.any?
+    # CSV or batch ID required - batch_id may be 'new'
+    if !clearance_params[:csv_file] && !clearance_params[:batch_id]
+      service.errors << "You must enter an Item id or CSV file to clearance items"
+    end
+
+    flash[:alert] = service.errors.join("<br/>") if service.errors.any?
+    flash[:notice] = service.notices.join("<br/>") if service.notices.any?
+
     redirect_to action: :index
 
   end
 
   def update
     batch = ClearanceBatch.find_by(id: params[:id])
+
     if !batch
       flash[:alert] = "Could not find batch id #{params[:id]}"
+
     elsif !batch.in_progress
       flash[:alert] = "Batch id #{params[:id]} is already closed"
+
     elsif clearance_params[:close_batch]
       batch.update_attributes(in_progress: false)
       flash[:notice] = "Clearance Batch #{batch.id} successfully closed"
+
     else
       flash[:alert] = "Failed to update batch #{params[:id]}, refresh and try again."
+
     end
+
     redirect_to action: :index
   end
 

@@ -13,7 +13,7 @@ describe "clearance_batch" do
       it "displays a list of all past clearance batches" do
         visit "/"
         expect(page).to have_content("Completed Batches")
-        within('table.clearance_batches') do
+        within('table.completed_batches') do
           expect(page).to have_content(clearance_batch_1.title)
           expect(page).to have_content(clearance_batch_2.title)
           expect(page).to have_content(clearance_batch_3.title)
@@ -27,7 +27,7 @@ describe "clearance_batch" do
 
       it "Batch has links to generate reports" do
         visit "/"
-        within('table.clearance_batches') do
+        within('table.completed_batches') do
           within(first('.batch-row')) do
             pdf = find('.pdf-btn')
             csv = find('.csv-btn')
@@ -153,7 +153,7 @@ describe "clearance_batch" do
           new_batch = ClearanceBatch.first
           expect(page).to have_content("#{items.count} items clearanced in batch #{new_batch.id}")
           expect(page).not_to have_content("item ids raised errors and were not clearanced")
-          within('table.clearance_batches') do
+          within('table.completed_batches') do
             expect(page.all('tr').count).to eq 2
           end
         end
@@ -170,7 +170,7 @@ describe "clearance_batch" do
           new_batch = ClearanceBatch.first
           expect(page).to have_content("#{valid_items.count} items clearanced in batch #{new_batch.id}")
           expect(page).to have_content("#{invalid_items.count} item ids raised errors and were not clearanced")
-          within('table.clearance_batches') do
+          within('table.completed_batches') do
             expect(page).to have_content(/Clearanced Batch \d+/)
           end
         end
@@ -186,7 +186,7 @@ describe "clearance_batch" do
           expect(page).not_to have_content("items clearanced in batch")
           expect(page).to have_content("No new clearance batch was added")
           expect(page).to have_content("#{invalid_items.count} item ids raised errors and were not clearanced")
-          within('table.clearance_batches') do
+          within('table.completed_batches') do
             expect(page).not_to have_content(/Clearanced Batch \d+/)
           end
         end
@@ -203,7 +203,7 @@ describe "clearance_batch" do
 
       it 'navigates to PDF report' do
         visit '/'
-        within('table.clearance_batches') do
+        within('table.completed_batches') do
           first('.pdf-btn').click
           expect(current_path).to eq clearance_batch_path(batch_1, format: :pdf)
           expect(page.response_headers).to have_content('application/pdf')
@@ -223,7 +223,7 @@ describe "clearance_batch" do
 
       it "navigates to CSV report" do
         visit '/'
-        within('table.clearance_batches') do
+        within('table.completed_batches') do
           within(first('.batch-row')) do
             find('.csv-btn').click
             expect(current_path).to eq clearance_batch_path(batch_1, format: :csv)
@@ -245,7 +245,7 @@ describe "clearance_batch" do
 
       it "navigates to HTML report" do
         visit '/'
-        within('table.clearance_batches') do
+        within('table.completed_batches') do
           within(first('.batch-row')) do
             click_button('HTML')
             expect(current_path).to eq clearance_batch_path(batch_1)
