@@ -9,7 +9,7 @@ module CapybaraHelper
       expect(page).not_to have_content(/Clearanced Batch \d+/)
     end
     attach_file("csv_file", file_name)
-    click_button "Clearance!"
+    click_button "Clearance CSV!"
     wait_for_ajax
     self
   end
@@ -17,7 +17,7 @@ module CapybaraHelper
   def upload_single_item(item)
     visit '/'
     fill_in('item_id', with: item.id)
-    find('#submit_clearance').click
+    find('#submit_item').click
     wait_for_ajax
     self
   end
@@ -29,7 +29,7 @@ module CapybaraHelper
       expect(page).not_to have_content(/In Progress Batch \d+/)
     end
     fill_in('item_id', with: item.id)
-    find('#submit_clearance').click
+    find('#submit_item').click
     wait_for_ajax
     within('table.in_progress_batches') do
       # This hard coding of elements seems hacky, would love some advice on a better approach.
@@ -45,7 +45,7 @@ module CapybaraHelper
     upload_first_item
     visit '/'
     fill_in('item_id', with: input)
-    click_button 'Clearance!'
+    click_button 'Clearance Item!'
     wait_for_ajax
     expect(page).to have_selector '.alert'
     expect(Item.find(other_item.id).status).to eq 'sellable'

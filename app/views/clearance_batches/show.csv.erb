@@ -1,7 +1,1 @@
-<% headers = Item.attribute_names %>
-
-<%= CSV.generate_line headers %>
-
-<% @clearance_batch.items.each do |item| %>
-  <%= CSV.generate_line(item.attributes.values) %>
-<% end %>
+<%= generate_csv_report(@clearance_batch.items) %>

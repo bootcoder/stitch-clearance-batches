@@ -85,7 +85,7 @@ describe "clearance_batch" do
         it 'to same batch' do
           upload_first_item
           fill_in('item_id', with: other_item.id)
-          click_button 'Clearance!'
+          click_button 'Clearance Item!'
           wait_for_ajax
           within('table.in_progress_batches') do
             expect(page.all('tr').count).to eq 2
@@ -98,7 +98,7 @@ describe "clearance_batch" do
           upload_first_item
           find('#batch_select').find(:option, 'New Batch').select_option
           fill_in('item_id', with: other_item.id)
-          click_button 'Clearance!'
+          click_button 'Clearance Item!'
           wait_for_ajax
           within('table.in_progress_batches') do
             expect(page.all('tr').count).to eq 3
@@ -115,7 +115,7 @@ describe "clearance_batch" do
           visit '/'
           find('#batch_select').find(:option, '1').select_option
           fill_in('item_id', with: single_item.id)
-          click_button 'Clearance!'
+          click_button 'Clearance Item!'
           wait_for_ajax
           within('table.in_progress_batches') do
             expect(page.all('tr').count).to eq 3
@@ -126,7 +126,7 @@ describe "clearance_batch" do
           end
           find('#batch_select').find(:option, '2').select_option
           fill_in('item_id', with: other_item.id)
-          click_button 'Clearance!'
+          click_button 'Clearance Item!'
           wait_for_ajax
           within('table.in_progress_batches') do
             expect(page.all('tr').count).to eq 3
@@ -233,8 +233,10 @@ describe "clearance_batch" do
 
       it 'renders correct CSV' do
         visit '/clearance_batches/1.csv'
-        expect(page).to have_content(Item.attribute_names.join(','))
-        expect(page).to have_content(batch_1.items.first.attributes.values.join(','))
+        batch_1.items.each do |item|
+          expect(page).to have_content(csv_headers(item).join(','))
+          expect(page).to have_content(csv_attrs(item).values.join(','))
+        end
       end
 
     end
@@ -281,10 +283,11 @@ describe "clearance_batch" do
       end
 
       it "can export CSV report" do
+        item = Item.find(1)
         visit '/clearance_batches/1'
         within('#report-header') do
           find('.csv-btn').click
-          expect(page.body).to have_content(Item.attribute_names.join(','))
+          expect(page.body).to have_content(csv_headers(item).join(','))
           expect(page.body).to have_content(batch_1.items.first.attributes.values.join(','))
         end
       end

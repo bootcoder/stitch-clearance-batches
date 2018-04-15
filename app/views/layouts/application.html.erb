@@ -7,9 +7,9 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<div class='text-center'>
+<header class='text-center'>
   <%= link_to image_tag('stitchfix.png', class: 'hero-img'), root_path %>
-</div>
+</header>
 <%= render partial: 'notifications' %>
 <%= yield %>
 
