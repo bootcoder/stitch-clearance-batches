@@ -320,7 +320,7 @@ describe "clearance_batch" do
         visit '/clearance_batches/1'
         within('#report-header') do
           find('.pdf-btn').click
-          expect(current_path).to eq clearance_batch_path(batch_2, format: :pdf)
+          expect(current_path).to eq clearance_batch_path(batch_1, format: :pdf)
           expect(page.response_headers).to have_content('application/pdf')
         end
       end
