@@ -4,7 +4,7 @@ header {
 
 .hero-img {
   display: block;
-  max-width: 100%;
+  max-width: 90%;
   margin-left:auto;
   margin-right:auto;
 }
@@ -54,7 +54,7 @@ header {
 }
 
 #submit_csv {
-  margin-top: 11.5%;
+  // margin-top: 11.5%;
 }
 
 .form-group {
@@ -66,13 +66,14 @@ header {
   margin-top: 2%;
 }
 
-
 .table-body {
-  display: block;
+  display: table;
+  width: 100%;
 }
 
-tbody{
+.table-container {
   display: block;
+  width: 100%;
   height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -102,3 +103,38 @@ tbody{
   max-height: 30px;
   max-width: 30px;
 }
+
+#batch-report {
+  border: 2px solid black;
+}
+
+.table-title {
+  margin: 2%;
+}
+
+tr {
+  width: 100%;
+}
+
+.report-header h4 {
+  text-align: center;
+}
+
+.in-progress-button {
+  width: 90px;
+  font-size: .85em;
+  margin: 5px;
+}
+
+.completed-btn {
+  padding: 5px;
+  text-align: center;
+  width: 60px;
+  font-size: .85em;
+  margin: 3px;
+}
+
+.report-row.gray-bg {
+  background-color: gray;
+}
+
