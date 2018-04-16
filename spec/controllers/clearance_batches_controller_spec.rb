@@ -11,7 +11,7 @@ describe ClearanceBatchesController, type: :controller do
     before(:each) { get :index }
 
     it "assigns all batches" do
-      expect(assigns(:completed_batches)).to eq [batch_1, batch_2]
+      expect(assigns(:completed_batches)).to eq [batch_2, batch_1]
       expect(assigns(:in_progress_batches)).to eq [in_progress_batch]
     end
 
@@ -165,7 +165,7 @@ describe ClearanceBatchesController, type: :controller do
     end
 
     context "unmet param dependency alerts user" do
-      before(:each) { post :create, params: { item_id: 6081279 } }
+      before(:each) { post :create, params: { batch_id: 6081279 } }
       it { should set_flash[:alert].to include "You must enter an Item id or CSV file to clearance items" }
     end
 

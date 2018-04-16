@@ -36,17 +36,14 @@ class ClearanceBatchesController < ApplicationController
 
     # CSV or batch ID required - batch_id may be 'new'
     # Item ID or batch ID required
-    ep clearance_params
-    if !clearance_params[:csv_file] && !clearance_params[:batch_id]
-      flash[:alert] = "You must enter an Item id or CSV file to clearance items"
-    elsif clearance_params[:batch_id] && clearance_params[:item_id] == ''
+    if !clearance_params[:csv_file] && ( clearance_params[:item_id] == '' || !clearance_params[:item_id] )
       flash[:alert] = "You must enter an Item id or CSV file to clearance items"
     else
+      # ClearancinService will figure out what to do with our input.
       service = ClearancingService.new(
         file: clearance_params[:csv_file],
         item_id: clearance_params[:item_id],
         batch: ClearanceBatch.find_by(id: clearance_params[:batch_id]))
-
       # CSV batches are automatically closed after processing.
       if service.batch.persisted? && clearance_params[:csv_file]
         service.batch.update_attributes(in_progress: false)
