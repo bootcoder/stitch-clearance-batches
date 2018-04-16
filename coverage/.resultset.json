@@ -24,10 +24,6 @@
         11,
         null,
         null,
-        1,
-        0,
-        null,
-        null,
         null
       ],
       "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/support/capybara_helper.rb": [
@@ -932,6 +928,6 @@
         null
       ]
     },
-    "timestamp": 1523910900
+    "timestamp": 1523911160
   }
 }
