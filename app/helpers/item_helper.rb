@@ -1,7 +1,5 @@
 module ItemHelper
 
-
-
   def csv_headers(item)
     csv_attrs(item).keys
   end
