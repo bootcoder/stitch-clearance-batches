@@ -5,7 +5,7 @@ class ClearanceBatchesController < ApplicationController
   # Started out with several Ajax views but ultimately decided things were small
   # enough to simply re-render index asynchronously
   def index
-    @in_progress_batches = ClearanceBatch.in_progress.order(updated_at: :desc)
+    @in_progress_batches = ClearanceBatch.in_progress
     @completed_batches  = ClearanceBatch.completed
 
     respond_to do |format|
