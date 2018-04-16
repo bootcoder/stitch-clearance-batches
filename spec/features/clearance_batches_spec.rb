@@ -258,7 +258,7 @@ describe "clearance_batch" do
         visit '/'
         within('table.completed_batches') do
           first('.pdf-btn').click
-          expect(current_path).to eq clearance_batch_path(batch_1, format: :pdf)
+          expect(current_path).to eq clearance_batch_path(batch_2, format: :pdf)
           expect(page.response_headers).to have_content('application/pdf')
         end
       end
@@ -279,7 +279,7 @@ describe "clearance_batch" do
         within('table.completed_batches') do
           within(first('.batch-row')) do
             find('.csv-btn').click
-            expect(current_path).to eq clearance_batch_path(batch_1, format: :csv)
+            expect(current_path).to eq clearance_batch_path(batch_2, format: :csv)
           end
         end
       end
@@ -301,7 +301,7 @@ describe "clearance_batch" do
         within('table.completed_batches') do
           within(first('.batch-row')) do
             click_button('View')
-            expect(current_path).to eq clearance_batch_path(batch_1)
+            expect(current_path).to eq clearance_batch_path(batch_2)
           end
         end
       end
@@ -320,7 +320,7 @@ describe "clearance_batch" do
         visit '/clearance_batches/1'
         within('#report-header') do
           find('.pdf-btn').click
-          expect(current_path).to eq clearance_batch_path(batch_1, format: :pdf)
+          expect(current_path).to eq clearance_batch_path(batch_2, format: :pdf)
           expect(page.response_headers).to have_content('application/pdf')
         end
       end
