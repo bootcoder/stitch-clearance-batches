@@ -15,8 +15,17 @@ Search through the project for case-sensitive 'NOTE:' to see specific comments l
 
 If I needed something I built it. No leaning on jQuery to enhance UI, no gems for simple tasks like forms, or any other 'helper' type things. The largest library I am utilizing is wicked_pdf.
 
-I'll admit, I haven't built a full-stack rails app in some time. Mostly React consuming Rails API's.
-I think that had an effect on my views as they are more modular (and thus more bountiful) than I recall from my past.
+I'll admit, I haven't built just a full-stack rails app in some time. Mostly React and Rails API's.
+
+I think that had an effect on my views as they are more modular (and thus more bountiful) than I recall from past Rails projects. That said, I considered scraping the front-end, converting to JSONic Rails and doing a quick set of React views. Honestly I think it would have been quicker, cleaner and easier to build upon. I read the README thoroughly and tried to conform in every possible way. In this instance, I felt it was a 'cool thing' that didn't meet the bar.
+
+#### Testing
+Mostly I TDD'd the app. There were a few instances of adding the spec after the fact. For instance, I wasn't sure what I expected back CSV render.
+
+Specs include:
+- Full Feature coverage
+- Full Controller coverage
+
 
 #### Design Decisions:
 
