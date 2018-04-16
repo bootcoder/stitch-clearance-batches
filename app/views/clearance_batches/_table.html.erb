@@ -1,6 +1,7 @@
 <!-- Combining these two tables into one partial -->
 <!-- was a good idea from a simplicity standpoint -->
 <!-- I'm not pleased with readability as a result.. -->
+<!-- Also Yes I agree, one should not ordinarily leave a comment in HTML -->
 
 <% if table_state == 'completed' %>
   <h3 class='table-title text-success'>Completed Batches</h3>
@@ -9,7 +10,7 @@
 <% end %>
 
 <div class='table-container'>
-  <table class="table table-responsive table-striped <%= table_state %>_batches">
+  <table class="table table-responsive table-striped <%= table_state %>_table">
     <tbody class='table-body'>
       <%- batches.each do |batch| -%>
         <tr class='batch-row text-center'>

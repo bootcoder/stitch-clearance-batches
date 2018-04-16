@@ -69,9 +69,11 @@ But I decided there was opportunity for more. Adding PDF,CSV, and HTML reports s
 
 -----
 
-Table Display: Getting the tables to scroll two wide was an journey. I think the result is good though. The current design allows for minimum departure from the core element (input form) as the user traverses what could be thousands of completed batches.
+Table Design: Getting the tables to scroll two wide was an journey. I think the result is good though. The current design allows for minimum departure from the core element (input form) as the user traverses what could be thousands of completed batches.
 
 I gave considerable thought to adding sortable table headers or a sort_by dropdown. Seemed non-MVP so I decided against it. Currently the lists always sort by most recently updated.
+
+Side styling note: App is fully responsive but not 'Mobile First', although I could foresee a realworld version of this transitioning to mobile to allow for on the go scan and clearance functionality
 
 -----
 
