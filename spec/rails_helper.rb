@@ -18,6 +18,7 @@ end
 
 Capybara.javascript_driver = :poltergeist
 
+# Clobbering Capybara race conditions!
 def wait_for_ajax
   Timeout.timeout(Capybara.default_max_wait_time) do
     loop do
