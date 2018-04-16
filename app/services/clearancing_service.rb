@@ -8,6 +8,7 @@ class ClearancingService
   # This refactor also allowed for a considerable reduction in controller code.
   # As the service now seamlessly handles both data types.
   def initialize(args)
+
     item_id             = args[:item_id]
     @batch              = args[:batch] || ClearanceBatch.new
     @file               = args[:file]
@@ -18,6 +19,9 @@ class ClearancingService
     process_csv if @file
     process_item(item_id) if item_id && !@file
 
+  end
+
+  def execute!
     clearance_items!
     generate_report
     return self

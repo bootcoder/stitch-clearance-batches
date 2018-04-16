@@ -43,7 +43,7 @@ class ClearanceBatchesController < ApplicationController
       service = ClearancingService.new(
         file: clearance_params[:csv_file],
         item_id: clearance_params[:item_id],
-        batch: ClearanceBatch.find_by(id: clearance_params[:batch_id]))
+        batch: ClearanceBatch.find_by(id: clearance_params[:batch_id])).execute!
       # CSV batches are automatically closed after processing.
       if service.batch.persisted? && clearance_params[:csv_file]
         service.batch.update_attributes(in_progress: false)
