@@ -58,7 +58,7 @@ private
   # Also, extracted from controller,
   # I feel the responsibility lies here and it's much cleaner
   def generate_report
-    @notices << "#{batch.items.count} items clearanced in batch #{batch.id}" if batch.id
+    @notices << "#{@batch_ids.count} items clearanced in batch #{batch.id}" if batch.id
     @errors << "#{@errors.count} item ids raised errors and were not clearanced" if errors.any?
     @errors << "No new clearance batch was added" unless batch.id
     @errors << "No Item or CSV passed" if !@item_id && !@file
