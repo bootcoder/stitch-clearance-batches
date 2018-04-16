@@ -3,10 +3,24 @@ header {
 }
 
 .form-spacer {
-  display: hidden;
+  background-color: #f5f5f5;
 }
 
-.form_container {
+.form-arrow {
+  max-height: 50px;
+}
+
+.reverse-arrow {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+#index_form {
+  border: 2px solid #f5f5f5;
+  border-radius: 20px;
+}
+
+#index_form_container {
   margin: 10px auto;
 }
 
@@ -28,7 +42,12 @@ header {
   height: 38px;
 }
 
-.form-control-file button {
+#submit_csv {
+  margin-top: 11.5%;
+}
+
+.form-group {
+  padding: 10px;
 }
 
 .form-label {
