@@ -1,5 +1,19 @@
-<%= render partial: 'index_form' %>
-<div id='index_tables_container' class='container'>
-  <div class='row'><%= render partial: 'in_progress_table' %></div>
-  <div class='row'><%= render partial: 'completed_table' %></div>
+<div id='app_container'>
+
+  <%= render partial: 'index_form' %>
+
+  <div id='index_tables_container' class='container'>
+    <div class='row'>
+
+      <div id='in_progress_table_container' class='col-md-6'>
+        <%= render partial: 'table', locals: {batches: @in_progress_batches, table_state: 'in_progress'} %>
+      </div>
+
+      <div id='completed_table_container' class='col-md-6'>
+        <%= render partial: 'table', locals: {batches: @completed_batches, table_state: 'completed'} %></div>
+      </div>
+
+    </div>
+  </div>
 </div>
+

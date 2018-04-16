@@ -11,7 +11,7 @@ describe ClearanceBatchesController, type: :controller do
     before(:each) { get :index }
 
     it "assigns all batches" do
-      expect(assigns(:clearance_batches)).to eq [batch_1, batch_2]
+      expect(assigns(:completed_batches)).to eq [batch_1, batch_2]
       expect(assigns(:in_progress_batches)).to eq [in_progress_batch]
     end
 

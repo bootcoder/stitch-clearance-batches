@@ -2,6 +2,8 @@ class ClearanceBatchesController < ApplicationController
 
 
   # NOTE: Split batches into two groups for in_progress and completed
+  # Started out with several Ajax views but ultimately decided things were small
+  # enough to simply re-render index asynchronously
   def index
     @in_progress_batches = ClearanceBatch.in_progress.order(updated_at: :desc)
     @completed_batches  = ClearanceBatch.completed
@@ -12,7 +14,6 @@ class ClearanceBatchesController < ApplicationController
     end
   end
 
-  # NOTE: All pdf / csv rendering called from here in the Show
   def show
     @clearance_batch = ClearanceBatch.includes(:items).find(params[:id])
 
