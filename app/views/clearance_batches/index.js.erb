@@ -1,8 +1,10 @@
-$('#index_tables_container').html("<%= j render partial: 'index_tables' %>")
+$('#in_progress_table_container').html("<%= j render partial: 'table', locals: {batches: @in_progress_batches, table_state: 'in_progress'} %>")
+$('#completed_table_container').html("<%= j render partial: 'table', locals: {batches: @completed_batches, table_state: 'completed'} %>")
 $('#index_form_container').replaceWith("<%= j render partial: 'index_form' %>")
 $('#notifications').html("<%= j render partial: 'notifications' %>")
 $('#index_form').trigger('reset')
 $('#item_id_input').focus()
 
-// NOTE: This grew as time went on, could just rerender index as a partial at
-// this point but,,,,,ewwwwwww.
+// NOTE: This grew as time went on,
+// could just rerender index as a partial at this point
+// but,,,,,ewwwwwww.

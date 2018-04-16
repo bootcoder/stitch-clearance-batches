@@ -34,7 +34,7 @@ describe "clearance_batch" do
             html = find('.html-btn')
             expect(pdf.value).to eq 'PDF'
             expect(csv.value).to eq 'CSV'
-            expect(html.value).to eq 'HTML'
+            expect(html.value).to eq 'View'
           end
         end
       end
@@ -88,8 +88,8 @@ describe "clearance_batch" do
           click_button 'Clearance Item!'
           wait_for_ajax
           within('table.in_progress_batches') do
-            expect(page.all('tr').count).to eq 2
-            expect(page.all('tr')[1].all('td')[2]).to have_content "2"
+            expect(page.all('tr').count).to eq 1
+            expect(page.all('tr')[0].all('td')[1]).to have_content "2"
             expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
           end
         end
@@ -101,9 +101,9 @@ describe "clearance_batch" do
           click_button 'Clearance Item!'
           wait_for_ajax
           within('table.in_progress_batches') do
-            expect(page.all('tr').count).to eq 3
-            expect(page.all('tr')[1].all('td')[2]).to have_content "1"
-            expect(page.all('tr')[2].all('td')[2]).to have_content "1"
+            expect(page.all('tr').count).to eq 2
+            expect(page.all('tr')[0].all('td')[1]).to have_content "1"
+            expect(page.all('tr')[1].all('td')[1]).to have_content "1"
             expect(page).to have_content "In Progress Batch #{ClearanceBatch.first.id}"
             expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
           end
@@ -118,9 +118,9 @@ describe "clearance_batch" do
           click_button 'Clearance Item!'
           wait_for_ajax
           within('table.in_progress_batches') do
-            expect(page.all('tr').count).to eq 3
-            expect(page.all('tr')[1].all('td')[2]).to have_content "6"
-            expect(page.all('tr')[2].all('td')[2]).to have_content "5"
+            expect(page.all('tr').count).to eq 2
+            expect(page.all('tr')[0].all('td')[1]).to have_content "6"
+            expect(page.all('tr')[1].all('td')[1]).to have_content "5"
             expect(page).to have_content "In Progress Batch #{ClearanceBatch.first.id}"
             expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
           end
@@ -129,9 +129,9 @@ describe "clearance_batch" do
           click_button 'Clearance Item!'
           wait_for_ajax
           within('table.in_progress_batches') do
-            expect(page.all('tr').count).to eq 3
-            expect(page.all('tr')[1].all('td')[2]).to have_content "6"
-            expect(page.all('tr')[2].all('td')[2]).to have_content "6"
+            expect(page.all('tr').count).to eq 2
+            expect(page.all('tr')[0].all('td')[1]).to have_content "6"
+            expect(page.all('tr')[1].all('td')[1]).to have_content "6"
             expect(page).to have_content "In Progress Batch #{ClearanceBatch.first.id}"
             expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
           end
@@ -154,7 +154,7 @@ describe "clearance_batch" do
           expect(page).to have_content("#{items.count} items clearanced in batch #{new_batch.id}")
           expect(page).not_to have_content("item ids raised errors and were not clearanced")
           within('table.completed_batches') do
-            expect(page.all('tr').count).to eq 2
+            expect(page.all('tr').count).to eq 1
           end
         end
 
@@ -247,7 +247,7 @@ describe "clearance_batch" do
         visit '/'
         within('table.completed_batches') do
           within(first('.batch-row')) do
-            click_button('HTML')
+            click_button('View')
             expect(current_path).to eq clearance_batch_path(batch_1)
           end
         end

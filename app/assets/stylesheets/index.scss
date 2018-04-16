@@ -2,8 +2,19 @@ header {
   margin: 10px;
 }
 
+.hero-img {
+  display: block;
+  max-width: 100%;
+  margin-left:auto;
+  margin-right:auto;
+}
+
 .form-spacer {
-  background-color: #f5f5f5;
+  margin-top: 25px;
+}
+
+.form-spacer p {
+  margin: 0;
 }
 
 .form-arrow {
@@ -47,9 +58,47 @@ header {
 }
 
 .form-group {
+  margin-top: 10px;
   padding: 10px;
 }
 
 .form-label {
   margin-top: 2%;
+}
+
+
+.table-body {
+  display: block;
+}
+
+tbody{
+  display: block;
+  height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#help-toggle {
+  display: none;
+}
+
+#help-container{
+  overflow: hidden;
+  max-height: 0;
+  transition-property: all;
+  transition-duration: 4s;
+  // transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+#help-toggle:checked ~ #help-container {
+  max-height: 500px;
+}
+
+.help-label {
+  float: right;
+}
+
+.btn-help {
+  max-height: 30px;
+  max-width: 30px;
 }

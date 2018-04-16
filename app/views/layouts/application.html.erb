@@ -7,8 +7,13 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<header class='text-center'>
+<header>
   <%= link_to image_tag('stitchfix.png', class: 'hero-img'), root_path %>
+  <div>
+    <input type="checkbox" id='help-toggle'>
+    <label for='help-toggle' class='help-label text-center'><%= image_tag 'help.png', class: 'btn-help' %></label>
+    <%= render partial: 'help' %>
+  </div>
 </header>
 <%= render partial: 'notifications' %>
 <%= yield %>

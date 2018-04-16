@@ -58,3 +58,18 @@ else
   puts
   puts "(Do a bin/rails db:drop then bin/setup to force a reload if you want)"
 end
+
+15.times do
+  batch = ClearanceBatch.create
+  rand(5..20).times do
+    batch = ClearancingService.new(item_id: rand(1..Item.count), batch: batch).batch
+  end
+  batch.update_attributes(in_progress: false)
+end
+
+5.times do
+  batch = ClearanceBatch.create
+  rand(1..10).times do
+    batch = ClearancingService.new(item_id: rand(1..Item.count), batch: batch).batch
+  end
+end

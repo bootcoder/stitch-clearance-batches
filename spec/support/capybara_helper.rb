@@ -5,8 +5,9 @@ module CapybaraHelper
   def upload_batch_file(file_name)
     visit "/"
     within('table.completed_batches') do
-      expect(page.all('tr').count).to eq 1
+      expect(page.all('tr').count).to eq 0
       expect(page).not_to have_content(/Clearanced Batch \d+/)
+      expect(page).not_to have_content(/In Progress Batch \d+/)
     end
     attach_file("csv_file", file_name)
     click_button "Clearance CSV!"
@@ -33,10 +34,11 @@ module CapybaraHelper
     wait_for_ajax
     within('table.in_progress_batches') do
       # This hard coding of elements seems hacky, would love some advice on a better approach.
-      expect(page.all('tr').count).to eq 2
-      expect(page.all('tr')[1].all('td')[2]).to have_content "1"
+      expect(page.all('tr').count).to eq 1
+      expect(page.all('tr')[0].all('td')[1]).to have_content "1"
       expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
     end
+    expect(page).to have_selector '.alert-info'
     expect(page).to have_content("Item #{item.id} Clearanced Successfully!")
     self
   end
@@ -47,7 +49,7 @@ module CapybaraHelper
     fill_in('item_id', with: input)
     click_button 'Clearance Item!'
     wait_for_ajax
-    expect(page).to have_selector '.alert'
+    expect(page).to have_selector '.alert-danger'
     expect(Item.find(other_item.id).status).to eq 'sellable'
     self
   end
