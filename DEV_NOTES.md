@@ -5,7 +5,7 @@
 
 Hi! And thanks for taking time to review my code.
 
-There are more casual comments in this code base than my norm.
+There are more casual comments strewn about in this code than is my norm.
 
 I felt it OK to justify things for you the reviewer as I went, since we have no pre-established feedback loop.
 
@@ -15,17 +15,35 @@ Search through the project for case-sensitive 'NOTE:' to see specific comments l
 
 If I needed something I built it. No leaning on jQuery to enhance UI, no gems for simple tasks like forms, or any other 'helper' type things. The largest library I am utilizing is wicked_pdf.
 
-I'll admit, I haven't built just a full-stack rails app in some time. Mostly React and Rails API's.
+I've been building a lot of React as of late. I think that had an effect on my views as they are more modular (and thus more bountiful) than I recall from past Rails projects. That said, I considered scraping the front-end, converting to JSONic Rails and doing a quick set of React views. Honestly I think it would have been quicker, cleaner and easier to build upon.
 
-I think that had an effect on my views as they are more modular (and thus more bountiful) than I recall from past Rails projects. That said, I considered scraping the front-end, converting to JSONic Rails and doing a quick set of React views. Honestly I think it would have been quicker, cleaner and easier to build upon. I read the README thoroughly and tried to conform in every possible way. In this instance, I felt it was a 'cool thing' that didn't meet the bar.
+I read the README thoroughly and tried to conform in every possible way. In this instance, I felt it was a 'cool thing' that didn't meet the bar.
+
+The CSS transition of the help div in lieu of JS however is a cool thing I can pull off! 😎 It wasn't just for giggles though, it's also functional, using CSS in this case was important as I did not want to introduce any code which would alter the user experience if JS fails.
 
 #### Testing
-Mostly I TDD'd the app. There were a few instances of adding the spec after the fact. For instance, I wasn't sure what I expected back CSV render.
+
+Mostly I TDD'd the app. There were a few instances of adding the spec after the fact. For instance, I wasn't sure what I expected back from CSV render until I made it happen.
 
 Specs include:
 - Full Feature coverage
 - Full Controller coverage
+- Full Model coverage
 
+Included or upgraded the following gems for testing:
+  - rspec-rails
+  - factory_bot_rails
+  - capybara
+  - poltergeist
+  - database_cleaner
+  - selenium-webdriver
+  - shoulda-matchers
+  - rails-controller-testing
+  - simplecov
+  - guard
+  - guard-rspec
+
+[SimpleCov report](./coverage/index.html) generated, 100% coverage.
 
 #### Design Decisions:
 
@@ -38,8 +56,11 @@ to add items to different clearance batches at different times. This need bore
 out the requirements which drove a significant portion of the development thereafter.
 
 I felt the best way to represent these states was with a flag attached to the batch itself.
-To do so cleanly required a change in the schema. Along with doubling the number of tables displayed on index.
-Overall I maintain this was a solid choice as the functionality added is substantial.
+To do so cleanly I made a change in the schema. Along with doubling the number of tables displayed on index.
+
+I could have accomplished my goal without these departures from the original product. Specifically to that tables, Just one table displaying both batch states would be cumbersome for the user as the app scales.
+
+Overall I maintain ```in_progress_batches``` was a solid choice as the increase in usability and functionality is substantial.
 
 -----
 
@@ -48,15 +69,20 @@ But I decided there was opportunity for more. Adding PDF,CSV, and HTML reports s
 
 -----
 
-Styling wise, Getting the tables to scroll two wide was an journey. I think the result is good though.
-The current design allows for minimum departure from the core element (input form) as the user traverses what could be thousands of completed batches.
+Table Display: Getting the tables to scroll two wide was an journey. I think the result is good though. The current design allows for minimum departure from the core element (input form) as the user traverses what could be thousands of completed batches.
+
+I gave considerable thought to adding sortable table headers or a sort_by dropdown. Seemed non-MVP so I decided against it. Currently the lists always sort by most recently updated.
 
 -----
 
-I took the opportunity to refactor a bit of your existing code as well.
-In particular, I think the ClearancingService is much cleaner
-while providing enhanced functionality and easing the burden on the controller.
+I took the opportunity to refactor your existing code. ```ClearancingService``` in particular is much cleaner while providing enhanced functionality and easing the burden on the controller dramatically.
+At first I left ```ClearancingService``` alone, just modifying it a scoach to handle items. After I hit MVP I gave it another look and decided there was a lot of room for growth.
+
 I left your specs as is as much as I could, they're your specs.
+
+-----
+
+If you're uploading the same sample CSV you sent out. It still works, but you will find the results are different. This is because I am seeding the DB with both batch types for demo purposes.
 
 -----
 
