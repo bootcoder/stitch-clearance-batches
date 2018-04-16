@@ -2,13 +2,13 @@
   <div class="row">
     <div class='col-md-6 text-center'>
       <h2>Clearance Batch Report:</h2>
-      <h4>Batch ID: <%= @clearance_batch.id %> Total Items: <%= @clearance_batch.items.count %></h4>
+      <h4>Batch ID: <%= @clearance_batch.id %> &nbsp; &nbsp; Total Items: <%= @clearance_batch.items.count %></h4>
     </div>
     <div class='col-md-6 text-center'>
       <h4>Export Options</h4>
       <div class='btn-group btn-group-lg' role='group'>
-        <%= button_to "PDF", clearance_batch_path(@clearance_batch, format: :pdf), method: :get, class: 'report-btn pdf-btn btn btn-primary'  %>
-        <%= button_to "CSV", clearance_batch_path(@clearance_batch, format: :csv), method: :get, class: 'report-btn csv-btn btn btn-primary'  %>
+        <%= button_to "PDF", clearance_batch_path(@clearance_batch, format: :pdf), method: :get, class: 'completed-btn pdf-btn btn btn-primary'  %>
+        <%= button_to "CSV", clearance_batch_path(@clearance_batch, format: :csv), method: :get, class: 'completed-btn csv-btn btn btn-primary'  %>
       </div>
     </div>
   </div>

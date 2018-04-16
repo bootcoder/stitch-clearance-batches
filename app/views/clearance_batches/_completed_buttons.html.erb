@@ -1,6 +1,6 @@
 <div class='btn-group'>
   <%= button_to "View", clearance_batch_path(batch), method: :get, class: 'completed-btn html-btn btn btn-info'  %>
-  <%= button_to "Reopen", clearance_batch_path(batch, format: :csv), method: :get, class: 'completed-btn open-btn btn btn-warning'  %>
+  <%= button_to "Reopen", clearance_batch_path(batch), method: :patch, name: 'open_batch', remote: true, class: 'completed-btn open-btn btn btn-warning'  %>
 </div>
 <div class='btn-group'>
   <%= button_to "PDF", clearance_batch_path(batch, format: :pdf), method: :get, class: 'completed-btn pdf-btn btn btn-secondary'  %>

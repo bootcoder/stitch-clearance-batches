@@ -1,7 +1,7 @@
 class ClearanceBatch < ActiveRecord::Base
 
   def title
-    self.in_progress ? "In Progress Batch #{self.id}" : "Clearanced Batch #{self.id}"
+    self.in_progress ? "In Progress Batch #{self.id}" : "Batch #{self.id}"
   end
 
 

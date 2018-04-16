@@ -2,12 +2,25 @@ header {
   margin: 10px;
 }
 
-.hero-img {
-  display: block;
-  max-width: 90%;
-  margin-left:auto;
-  margin-right:auto;
+h1 a {
+  color: black;
 }
+
+h1 a:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.hero-img {
+  height: 90px;
+}
+
+// .hero {
+//   display: block;
+//   max-width: 100%;
+//   margin-left:auto;
+//   margin-right:auto;
+// }
 
 .form-spacer {
   margin-top: 25px;
@@ -54,7 +67,7 @@ header {
 }
 
 #submit_csv {
-  // margin-top: 11.5%;
+  margin-top: 45px;
 }
 
 .form-group {
@@ -64,6 +77,10 @@ header {
 
 .form-label {
   margin-top: 2%;
+}
+
+.table td {
+  vertical-align: inherit;
 }
 
 .table-body {
@@ -87,7 +104,7 @@ header {
   overflow: hidden;
   max-height: 0;
   transition-property: all;
-  transition-duration: 4s;
+  transition-duration: 2s;
   // transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
 
