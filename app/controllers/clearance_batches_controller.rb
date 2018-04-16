@@ -34,26 +34,29 @@ class ClearanceBatchesController < ApplicationController
     # feel kinda icky about the nonRESTfullness but didn't feel
     # an Items controller was the solution either
 
-    service = ClearancingService.new(
-      file: clearance_params[:csv_file],
-      item_id: clearance_params[:item_id],
-      batch: ClearanceBatch.find_by(id: clearance_params[:batch_id]))
-
-    # CSV batches are automatically closed.
-    if service.batch.persisted? && clearance_params[:csv_file]
-      service.batch.update_attributes(in_progress: false)
-    end
-
     # CSV or batch ID required - batch_id may be 'new'
+    # Item ID or batch ID required
+    ep clearance_params
     if !clearance_params[:csv_file] && !clearance_params[:batch_id]
-      service.errors << "You must enter an Item id or CSV file to clearance items"
+      flash[:alert] = "You must enter an Item id or CSV file to clearance items"
+    elsif clearance_params[:batch_id] && clearance_params[:item_id] == ''
+      flash[:alert] = "You must enter an Item id or CSV file to clearance items"
+    else
+      service = ClearancingService.new(
+        file: clearance_params[:csv_file],
+        item_id: clearance_params[:item_id],
+        batch: ClearanceBatch.find_by(id: clearance_params[:batch_id]))
+
+      # CSV batches are automatically closed after processing.
+      if service.batch.persisted? && clearance_params[:csv_file]
+        service.batch.update_attributes(in_progress: false)
+      end
+
+      # Put together various flash msgs for after action report.
+      flash[:alert] = service.errors.join("<br/>") if service.errors.any?
+      flash[:notice] = service.notices.join("<br/>") if service.notices.any?
     end
-
-    flash[:alert] = service.errors.join("<br/>") if service.errors.any?
-    flash[:notice] = service.notices.join("<br/>") if service.notices.any?
-
     redirect_to action: :index
-
   end
 
   def update
