@@ -23,6 +23,7 @@ class ClearanceBatchesController < ApplicationController
       format.pdf do
         render pdf: "clearance_batch_#{@clearance_batch.id}",
                template: 'clearance_batches/_show.html.erb',
+               layout: 'pdf.html',
                title: "clearance_batch_#{@clearance_batch.id}"
       end
     end
@@ -59,14 +60,21 @@ class ClearanceBatchesController < ApplicationController
     batch = ClearanceBatch.find_by(id: params[:id])
 
     if !batch
-      flash[:alert] = "Could not find batch id #{params[:id]}"
+      flash[:alert] = "Could not find batch id #{params[:id]}."
 
-    elsif !batch.in_progress
-      flash[:alert] = "Batch id #{params[:id]} is already closed"
+    elsif !batch.in_progress && clearance_params[:close_batch]
+      flash[:alert] = "Batch id #{params[:id]} is already closed."
+
+    elsif batch.in_progress && clearance_params[:open_batch]
+      flash[:alert] = "Batch id #{params[:id]} is already open."
 
     elsif clearance_params[:close_batch]
       batch.update_attributes(in_progress: false)
-      flash[:notice] = "Clearance Batch #{batch.id} successfully closed"
+      flash[:notice] = "Clearance Batch #{batch.id} successfully closed."
+
+    elsif clearance_params[:open_batch]
+      batch.update_attributes(in_progress: true)
+      flash[:notice] = "Clearance Batch #{batch.id} reopened."
 
     else
       flash[:alert] = "Failed to update batch #{params[:id]}, refresh and try again."
@@ -79,7 +87,7 @@ class ClearanceBatchesController < ApplicationController
   private
 
   def clearance_params
-    params.permit(:csv_file, :item_id, :batch_id, :close_batch)
+    params.permit(:csv_file, :item_id, :batch_id, :close_batch, :open_batch)
   end
 
 end

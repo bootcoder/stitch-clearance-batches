@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TakeHomeChallenge</title>
+  <title>Stitch Fix Clearancing Tool</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-<header>
-  <%= link_to image_tag('stitchfix.png', class: 'hero-img'), root_path %>
-  <div>
-    <input type="checkbox" id='help-toggle'>
-    <label for='help-toggle' class='help-label text-center'><%= image_tag 'help.png', class: 'btn-help' %></label>
-    <%= render partial: 'help' %>
+<header class='container-fluid'>
+  <div class='col-md-12'>
+      <%= link_to image_tag('stitch.png', class: 'hero-img offset-col-6'), root_path %>
+      <input type="checkbox" id='help-toggle'>
+      <label for='help-toggle' class='help-label text-center'><%= image_tag 'help.png', class: 'btn-help offset-col-10' %></label>
+      <%= render partial: 'help' %>
   </div>
 </header>
 <%= render partial: 'notifications' %>

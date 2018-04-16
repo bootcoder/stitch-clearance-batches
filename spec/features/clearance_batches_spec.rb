@@ -171,7 +171,7 @@ describe "clearance_batch" do
           expect(page).to have_content("#{valid_items.count} items clearanced in batch #{new_batch.id}")
           expect(page).to have_content("#{invalid_items.count} item ids raised errors and were not clearanced")
           within('table.completed_batches') do
-            expect(page).to have_content(/Clearanced Batch \d+/)
+            expect(page).to have_content('Batch 1')
           end
         end
 
@@ -192,6 +192,59 @@ describe "clearance_batch" do
         end
       end
     end
+
+    describe 'Batch State', js: true do
+      let!(:in_progress_batch) { FactoryBot.create(:in_progress_batch)}
+      let!(:completed_batch) { FactoryBot.create(:clearance_batch_with_items)}
+
+      it "an in progress batch can be closed" do
+        visit('/')
+        expect(page.all('table.completed_batches tr').count).to eq 1
+        expect(page.all('table.in_progress_batches tr').count).to eq 1
+        within('table.in_progress_batches') do
+          first('.close-btn').click
+          wait_for_ajax
+        end
+        expect(page.all('table.completed_batches tr').count).to eq 2
+        expect(page.all('table.in_progress_batches tr').count).to eq 0
+      end
+
+      it "a completed batch can be reopened" do
+        visit('/')
+        expect(page.all('table.completed_batches tr').count).to eq 1
+        expect(page.all('table.in_progress_batches tr').count).to eq 1
+        within('table.completed_batches') do
+          first('.open-btn').click
+          wait_for_ajax
+        end
+        expect(page.all('table.completed_batches tr').count).to eq 0
+        expect(page.all('table.in_progress_batches tr').count).to eq 2
+      end
+    end
+
+    describe 'Help' do
+      it 'does not display help on load' do
+        visit '/'
+        expect(page).to have_selector('#help-container', visible: false)
+      end
+
+      it 'clicking help icon displays help' do
+        visit '/'
+        expect(page).to have_selector('#help-container', visible: false)
+        find('.btn-help').click
+        expect(page).to have_selector('#help-container', visible: true)
+      end
+
+      it 'clicking help icon a second time hides help' do
+        visit '/'
+        expect(page).to have_selector('#help-container', visible: false)
+        find('.btn-help').click
+        expect(page).to have_selector('#help-container', visible: true)
+        find('.btn-help').click
+        expect(page).to have_selector('#help-container', visible: false)
+      end
+    end
+
   end
 
   describe 'SHOW', type: :feature do
@@ -260,16 +313,6 @@ describe "clearance_batch" do
           expect(page).to have_content(batch_1.items.first.price_sold.to_f)
           expect(page.body).to have_content("Clearance Batch Report:")
           expect(page.body).to have_content("Batch ID: #{batch_1.id}")
-        end
-      end
-
-      it "rows have alternating backgrounds" do
-        visit '/clearance_batches/1'
-        within('table#batch-report') do
-          first_row = first('.report-row')
-          second_row = page.all('.report-row')[1]
-          expect(first_row[:class].include?('gray-bg')).to be true
-          expect(second_row[:class].include?('gray-bg')).to be false
         end
       end
 

@@ -67,10 +67,32 @@ describe ClearanceBatchesController, type: :controller do
       end
     end
 
+    context 'reopens a batch and flashes success' do
+      let!(:batch) {FactoryBot.create(:clearance_batch_with_items)}
+      before(:each) { put :update, params: { id: batch, open_batch: '' } }
+
+      it { should set_flash[:notice].to include "Clearance Batch #{batch.id} reopened" }
+
+      it 'renders correctly' do
+        expect(response).to have_http_status(302)
+        expect(response).to redirect_to(action: :index)
+      end
+
+      it "closes the batch" do
+        expect(ClearanceBatch.find(batch.id).in_progress).to eq true
+      end
+    end
+
     context "does not update a previously closed batch" do
       let!(:closed_batch) { FactoryBot.create(:clearance_batch_with_items)}
       before(:each) { put :update, params: { id: closed_batch, close_batch: '' } }
       it { should set_flash[:alert].to include "Batch id #{closed_batch.id} is already closed" }
+    end
+
+    context "does not update a previously open batch" do
+      let!(:open_batch) { FactoryBot.create(:in_progress_batch)}
+      before(:each) { put :update, params: { id: open_batch, open_batch: '' } }
+      it { should set_flash[:alert].to include "Batch id #{open_batch.id} is already open." }
     end
 
     context "fails to update without close_batch param" do
@@ -80,8 +102,8 @@ describe ClearanceBatchesController, type: :controller do
     end
 
     context "handles INVALID INPUT correctly" do
-      before(:each) { put :update, params: { id: 'fluzinsinks', close_batch: '' } }
-      it { should set_flash[:alert].to include "Could not find batch id fluzinsinks" }
+      before(:each) { put :update, params: { id: 'fluzinstinks', close_batch: '' } }
+      it { should set_flash[:alert].to include "Could not find batch id fluzinstinks" }
     end
 
     context "handles batch not found correctly" do
@@ -139,7 +161,7 @@ describe ClearanceBatchesController, type: :controller do
     end
 
     context 'params' do
-      it { should permit(:item_id, :batch_id, :csv_file, :close_batch).for(:create) }
+      it { should permit(:item_id, :batch_id, :csv_file, :close_batch, :open_batch).for(:create) }
     end
 
     context "unmet param dependency alerts user" do
