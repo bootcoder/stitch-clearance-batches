@@ -6,7 +6,7 @@ class ClearancingService
 
   # NOTE: Clean up usage significantly utilizing init.
   # This refactor also allowed for a considerable reduction in controller code.
-  # As the service seamlessly handles both data types.
+  # As the service now seamlessly handles both data types.
   def initialize(args)
     item_id             = args[:item_id]
     @batch              = args[:batch] || ClearanceBatch.new
@@ -53,10 +53,10 @@ private
     end
   end
 
-  # NOTE: Last call in init:
-  # ensures some notice or error is returned from the service
-  # Also, extracted from controller,
+  # NOTE: Service previously handled generating Item msgs:
+  # Extracted batch msgs from controller, to the service as well.
   # I feel the responsibility lies here and it's much cleaner
+  # Ensures some notice or error is returned from the service
   def generate_report
     @notices << "#{@batch_ids.count} items clearanced in batch #{batch.id}" if batch.id
     @errors << "#{@errors.count} item ids raised errors and were not clearanced" if errors.any?

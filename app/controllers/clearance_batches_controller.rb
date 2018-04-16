@@ -29,10 +29,10 @@ class ClearanceBatchesController < ApplicationController
     end
   end
 
+  # NOTE: handles create for csv and item into a batch.
+  # feel kinda icky about the nonRESTfullness but didn't feel
+  # an Items controller was the solution either
   def create
-    # NOTE: handles create for csv and item into a batch.
-    # feel kinda icky about the nonRESTfullness but didn't feel
-    # an Items controller was the solution either
 
     # CSV or batch ID required - batch_id may be 'new'
     # Item ID or batch ID required
@@ -86,6 +86,7 @@ class ClearanceBatchesController < ApplicationController
 
   private
 
+  # NOTE: Added Strong params because..... That's what you do. :-)
   def clearance_params
     params.permit(:csv_file, :item_id, :batch_id, :close_batch, :open_batch)
   end
