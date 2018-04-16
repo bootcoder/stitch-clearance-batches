@@ -20,8 +20,4 @@ module CsvHelper
     tmp_file_name
   end
 
-  def generate_item_csv_row(item)
-    CSV.generate_line(item.attributes.values)
-  end
-
 end
