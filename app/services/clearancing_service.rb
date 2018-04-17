@@ -53,7 +53,7 @@ private
     potential_item = Item.find_by(id: potential_item_id)
 
     if potential_item && potential_item.status == 'clearanced'
-      return "Item #{potential_item_id} already clearanced"
+      return "Item id #{potential_item_id} already clearanced"
     end
 
     if !potential_item

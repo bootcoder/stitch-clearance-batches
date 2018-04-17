@@ -3,3 +3,6 @@ $('#index_form_container').replaceWith("<%= j render partial: 'index_form' %>")
 $('#notifications').html("<%= j render partial: 'notifications' %>")
 $('#index_form').trigger('reset')
 $('#item_id_input').focus()
+
+// NOTE: This grew as time went on, could just rerender index as a partial at
+// this point but,,,,,ewwwwwww.
