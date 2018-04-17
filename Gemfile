@@ -18,6 +18,7 @@ group :test, :development do
   gem "selenium-webdriver"
   gem 'pdf-reader'
   gem 'shoulda-matchers'
+  gem 'rails-controller-testing'
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-livereload'
