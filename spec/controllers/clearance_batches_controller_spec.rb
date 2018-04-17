@@ -69,7 +69,7 @@ describe ClearanceBatchesController, type: :controller do
 
     context 'reopens a batch and flashes success' do
       let!(:batch) {FactoryBot.create(:clearance_batch_with_items)}
-      before(:each) { put :update, params: { id: batch, open_batch: '' } }
+      before(:each) { put :update, params: { id: batch, activate_batch: '' } }
 
       it { should set_flash[:notice].to include "Clearance Batch #{batch.id} reopened" }
 
@@ -90,9 +90,9 @@ describe ClearanceBatchesController, type: :controller do
     end
 
     context "does not update a previously open batch" do
-      let!(:open_batch) { FactoryBot.create(:active_batch)}
-      before(:each) { put :update, params: { id: open_batch, open_batch: '' } }
-      it { should set_flash[:alert].to include "Batch id #{open_batch.id} is already open." }
+      let!(:activate_batch) { FactoryBot.create(:active_batch)}
+      before(:each) { put :update, params: { id: activate_batch, activate_batch: '' } }
+      it { should set_flash[:alert].to include "Batch id #{activate_batch.id} is already open." }
     end
 
     context "fails to update without close_batch param" do
@@ -161,7 +161,7 @@ describe ClearanceBatchesController, type: :controller do
     end
 
     context 'params' do
-      it { should permit(:item_id, :batch_id, :csv_file, :close_batch, :open_batch).for(:create) }
+      it { should permit(:item_id, :batch_id, :csv_file, :close_batch, :activate_batch).for(:create) }
     end
 
     context "unmet param dependency alerts user" do

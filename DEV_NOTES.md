@@ -15,14 +15,12 @@ Search through the project for case-sensitive 'NOTE:' to see specific comments l
 Inspection. If you want to run a diff on my code. (Since we won't be opening a PR on GitHub) I suggest using:
 
 ```bash
-git diff 5eec546 ':(exclude)public/assets/*'
+git diff 7aedf84 ':(exclude)public/assets/*'
 ```
 
 This will show the work from my current commit back to the initial commit and will leave off all the messy rails code that doesn't belong to me anyhow.
 
-Ordinarily I would clean this up and squash these 60 or so commits down into 3-4 before opening a PR.
-
-I left them in their granular form here so you could better see my flow if you desire. That said, I'd also like to mention that I could have (and usually do) committed more often.
+Ordinarily I would clean this up and squash these 60 or so commits down into 3-4 before opening a PR. I left them in their granular form here so you could better see my flow if you desire. That said, I'd also like to mention that I could have (and usually do) committed more often.
 
 
 #### Build mentality:
@@ -31,7 +29,7 @@ If I needed something I built it. Not because I can't use tons of libraries, but
 
 I've been building a lot of React as of late. I think that had an effect on my views as they are more modular (and thus more bountiful) than I recall from past Rails projects. That said, I considered scraping the front-end, converting to JSONic Rails and doing a quick set of React views. Honestly I think it would have been quicker, cleaner and easier to build upon.
 
-I read the README thoroughly and tried to conform in every possible way. In this instance, I felt it was a 'cool thing' that didn't meet the bar.
+I read the README thoroughly and tried to conform in every possible way. In this instance, I felt React was a 'cool thing' that didn't meet the bar.
 
 The CSS transition of the help div in lieu of JS however is a cool thing I can pull off! 😎 It wasn't just for giggles though, it's also functional, using CSS in this case was important as I did not want to introduce any code which would alter the user experience if JS fails.
 
@@ -70,9 +68,12 @@ Side styling note: App is fully responsive but not 'Mobile First', although I co
 
 -----
 
-I took the opportunity to refactor your existing code. ```ClearancingService``` in particular is much cleaner while providing enhanced functionality and easing the burden on the ```ClearanceBatchesController``` dramatically. ```ClearancingService``` now handles: all input types, generates the bulk of flash messages for the controller#create, and is much easier to read / test.
+I took the opportunity to refactor your existing code. ```ClearancingService``` in particular is much cleaner while providing enhanced functionality and easing the burden on the ```ClearanceBatchesController``` dramatically.
 
 At first I left ```ClearancingService``` alone, just modifying it a scoach to handle items. After I hit MVP I gave it another look and decided there was a lot of room for growth.
+
+```ClearancingService``` now handles: all input types, generates the bulk of flash messages for the controller#create, and is much easier to read / test.
+
 
 I left your specs as is as much as I could, they're your specs after all.
 
@@ -83,6 +84,10 @@ Since we have no CI tool here, I'm using Guard / Guard-Rspec as my continuous in
 -----
 
 If you're uploading the same sample CSV you sent out. It still works, but you will find the results are different. This is because I am seeding the DB with both batch types for demo purposes.
+
+-----
+
+Lastly, I upgraded to BS4 cause that's what the hip kids are using /s. Which entailed upgrading several other parts of the app as well. A quick ```bundle install``` will have you all set. (Sorry about Nokogiri & EventMachine) App runs on Ruby Version ```2.4.2``` the README.
 
 
 #### Testing
@@ -107,8 +112,13 @@ Included or upgraded the following gems for testing:
   - guard
   - guard-rspec
 
+You may need the following installed to run specs:
+- ```brew install phantomjs```
+- ```brew install selenium-server-standalone```
+- ```brew install watchman```
 
-**After you run the specs** a [SimpleCov report](./coverage/index.html) is generated, 100% coverage.
+
+**After you run the specs** with ```bundle exec rspec .``` a [SimpleCov report](./coverage/index.html) is generated, 100% coverage achieved.
 
 #### One more thing
 

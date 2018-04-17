@@ -59,20 +59,23 @@ class ClearanceBatchesController < ApplicationController
   def update
     batch = ClearanceBatch.find_by(id: params[:id])
 
+    # No valid batch passed
     if !batch
       flash[:alert] = "Could not find batch id #{params[:id]}."
 
+    # Attempting to close an already closed batch
     elsif !batch.active && clearance_params[:close_batch]
       flash[:alert] = "Batch id #{params[:id]} is already closed."
 
-    elsif batch.active && clearance_params[:open_batch]
+    # Attempting to open an already active branch
+    elsif batch.active && clearance_params[:activate_batch]
       flash[:alert] = "Batch id #{params[:id]} is already open."
 
     elsif clearance_params[:close_batch]
       batch.update_attributes(active: false)
       flash[:notice] = "Clearance Batch #{batch.id} successfully closed."
 
-    elsif clearance_params[:open_batch]
+    elsif clearance_params[:activate_batch]
       batch.update_attributes(active: true)
       flash[:notice] = "Clearance Batch #{batch.id} reopened."
 
@@ -88,7 +91,7 @@ class ClearanceBatchesController < ApplicationController
 
   # NOTE: Added Strong params because..... That's what you do. :-)
   def clearance_params
-    params.permit(:csv_file, :item_id, :batch_id, :close_batch, :open_batch)
+    params.permit(:csv_file, :item_id, :batch_id, :close_batch, :activate_batch)
   end
 
 end
