@@ -1,6 +1,27 @@
 module CapybaraHelper
 
+  # NOTE: Self contained helpers return self and are chainable.
+  # They also assert expectation of their own
+  # This is a great way to clean up / DRY out feature specs.
+
   include Capybara::DSL
+
+  def check_active_item_count(count_1, count_2)
+    within('table.active_table') do
+      expect(page.all('tr').count).to eq 2
+      expect(page.all('tr')[0].all('td')[1]).to have_content count_1.to_s
+      expect(page.all('tr')[1].all('td')[1]).to have_content count_2.to_s
+      expect(page).to have_content "Active Batch #{ClearanceBatch.first.id}"
+      expect(page).to have_content "Active Batch #{ClearanceBatch.last.id}"
+      self
+    end
+  end
+
+  def check_count_all_rows(completed_count, active_count)
+    expect(page.all('table.completed_table tr').count).to eq completed_count
+    expect(page.all('table.active_table tr').count).to eq active_count
+    self
+  end
 
   def upload_batch_file(file_name)
     visit "/"
@@ -21,6 +42,13 @@ module CapybaraHelper
     find('#submit_item').click
     wait_for_ajax
     self
+  end
+
+  def upload_single_item_to_batch(item_id, batch_id)
+    find('#batch_select').find(:option, batch_id).select_option
+    fill_in('item_id', with: item_id)
+    click_button 'Clearance Item!'
+    wait_for_ajax
   end
 
   def upload_first_item(item = Item.first)

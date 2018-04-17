@@ -96,48 +96,23 @@ describe "clearance_batch" do
 
         it 'to new batch' do
           upload_first_item
-          find('#batch_select').find(:option, 'New Batch').select_option
-          fill_in('item_id', with: other_item.id)
-          click_button 'Clearance Item!'
-          wait_for_ajax
-          within('table.active_table') do
-            expect(page.all('tr').count).to eq 2
-            expect(page.all('tr')[0].all('td')[1]).to have_content "1"
-            expect(page.all('tr')[1].all('td')[1]).to have_content "1"
-            expect(page).to have_content "Active Batch #{ClearanceBatch.first.id}"
-            expect(page).to have_content "Active Batch #{ClearanceBatch.last.id}"
-          end
+          upload_single_item_to_batch(other_item.id, 'New Batch')
+          check_active_item_count(1,1)
         end
 
         it 'to different batch' do
           FactoryBot.create(:active_batch)
           FactoryBot.create(:active_batch)
+
           visit '/'
-          find('#batch_select').find(:option, '1').select_option
-          fill_in('item_id', with: single_item.id)
-          click_button 'Clearance Item!'
-          wait_for_ajax
-          within('table.active_table') do
-            expect(page.all('tr').count).to eq 2
-            expect(page.all('tr')[0].all('td')[1]).to have_content "6"
-            expect(page.all('tr')[1].all('td')[1]).to have_content "5"
-            expect(page).to have_content "Active Batch #{ClearanceBatch.first.id}"
-            expect(page).to have_content "Active Batch #{ClearanceBatch.last.id}"
-          end
-          find('#batch_select').find(:option, '2').select_option
-          fill_in('item_id', with: other_item.id)
-          click_button 'Clearance Item!'
-          wait_for_ajax
-          within('table.active_table') do
-            expect(page.all('tr').count).to eq 2
-            expect(page.all('tr')[0].all('td')[1]).to have_content "6"
-            expect(page.all('tr')[1].all('td')[1]).to have_content "6"
-            expect(page).to have_content "Active Batch #{ClearanceBatch.first.id}"
-            expect(page).to have_content "Active Batch #{ClearanceBatch.last.id}"
-          end
+          check_active_item_count(5,5)
+
+          upload_single_item_to_batch(single_item.id, '1')
+          check_active_item_count(6,5)
+
+          upload_single_item_to_batch(other_item.id, '2')
+          check_active_item_count(6,6)
         end
-
-
       end
 
     end
@@ -187,7 +162,7 @@ describe "clearance_batch" do
           expect(page).to have_content("No new clearance batch was added")
           expect(page).to have_content("#{invalid_items.count} ids raised errors and were not clearanced")
           within('table.completed_table') do
-            expect(page).not_to have_content(/Clearanced Batch \d+/)
+            expect(page).not_to have_content(/ Batch \d+/)
           end
         end
       end
@@ -199,26 +174,22 @@ describe "clearance_batch" do
 
       it "an active batch can be closed" do
         visit('/')
-        expect(page.all('table.completed_table tr').count).to eq 1
-        expect(page.all('table.active_table tr').count).to eq 1
+        check_count_all_rows(1,1)
         within('table.active_table') do
           first('.close-btn').click
           wait_for_ajax
         end
-        expect(page.all('table.completed_table tr').count).to eq 2
-        expect(page.all('table.active_table tr').count).to eq 0
+        check_count_all_rows(2,0)
       end
 
       it "a completed batch can be reactivated" do
         visit('/')
-        expect(page.all('table.completed_table tr').count).to eq 1
-        expect(page.all('table.active_table tr').count).to eq 1
+        check_count_all_rows(1,1)
         within('table.completed_table') do
           first('.open-btn').click
           wait_for_ajax
         end
-        expect(page.all('table.completed_table tr').count).to eq 0
-        expect(page.all('table.active_table tr').count).to eq 2
+        check_count_all_rows(0,2)
       end
     end
 
@@ -339,19 +310,3 @@ describe "clearance_batch" do
   end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
