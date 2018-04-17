@@ -18,7 +18,7 @@
           <td>
             <div class='btn-group'>
               <%= button_to 'View', clearance_batch_path(batch), class: 'report-btn html-btn btn btn-secondary', method: 'get' %>
-              <%= button_to 'Close', clearance_batch_path(batch), class: 'report-btn html-btn btn btn-warning', name: 'close_batch', method: :patch %>
+              <%= button_to 'Close', clearance_batch_path(batch), class: 'report-btn html-btn btn btn-warning', name: 'close_batch', remote: true, method: :patch %>
             </div>
           </td>
         </tr>
