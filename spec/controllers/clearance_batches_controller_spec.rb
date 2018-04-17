@@ -71,7 +71,7 @@ describe ClearanceBatchesController, type: :controller do
       let!(:batch) {FactoryBot.create(:clearance_batch_with_items)}
       before(:each) { put :update, params: { id: batch, activate_batch: '' } }
 
-      it { should set_flash[:notice].to include "Clearance Batch #{batch.id} reopened" }
+      it { should set_flash[:notice].to include "Clearance Batch #{batch.id} reactivated" }
 
       it 'renders correctly' do
         expect(response).to have_http_status(302)

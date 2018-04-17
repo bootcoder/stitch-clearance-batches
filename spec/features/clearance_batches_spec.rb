@@ -209,7 +209,7 @@ describe "clearance_batch" do
         expect(page.all('table.active_table tr').count).to eq 0
       end
 
-      it "a completed batch can be reopened" do
+      it "a completed batch can be reactivated" do
         visit('/')
         expect(page.all('table.completed_table tr').count).to eq 1
         expect(page.all('table.active_table tr').count).to eq 1

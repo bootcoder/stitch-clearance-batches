@@ -21,6 +21,8 @@ class ClearancingService
 
   end
 
+  # NOTE: Originally I included these calls within init above.
+  # Extracted here for a clearer separation of concerns.
   def execute!
     clearance_items!
     generate_report
@@ -30,7 +32,7 @@ class ClearancingService
 private
 
   # NOTE: Formerly #process_file, now simply processes each item
-  # Also extracted the tempfile dependency from the controller
+  # Also extracted the tempfile dependency from the controller as this is the only place it is used.
   def process_csv
     @file = @file.tempfile
     CSV.foreach(@file, headers: false) { |row| process_item(row[0].to_i) }
@@ -52,6 +54,8 @@ private
     @batch_ids.each do |item_id|
       item = Item.find(item_id)
       item.clearance!
+      # NOTE: Considered adding a catch here if the item fails to save.
+      # Feels unneeded as the item cannot possibly have invalid state at this point.
       @batch.items << item
       @notices << "Item #{item_id} Clearanced Successfully!"
     end

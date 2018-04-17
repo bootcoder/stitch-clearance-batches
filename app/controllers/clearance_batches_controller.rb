@@ -22,7 +22,7 @@ class ClearanceBatchesController < ApplicationController
       format.csv
       format.pdf do
         render pdf: "clearance_batch_#{@clearance_batch.id}",
-               template: 'clearance_batches/_show.html.erb',
+               template: 'clearance_batches/_report.html.erb',
                layout: 'pdf.html',
                title: "clearance_batch_#{@clearance_batch.id}"
       end
@@ -71,14 +71,17 @@ class ClearanceBatchesController < ApplicationController
     elsif batch.active && clearance_params[:activate_batch]
       flash[:alert] = "Batch id #{params[:id]} is already open."
 
+    # Close Success Case
     elsif clearance_params[:close_batch]
       batch.update_attributes(active: false)
       flash[:notice] = "Clearance Batch #{batch.id} successfully closed."
 
+    # Activated Success Case
     elsif clearance_params[:activate_batch]
       batch.update_attributes(active: true)
-      flash[:notice] = "Clearance Batch #{batch.id} reopened."
+      flash[:notice] = "Clearance Batch #{batch.id} reactivated."
 
+    # Fallthrough catch flashes general error
     else
       flash[:alert] = "Failed to update batch #{params[:id]}, refresh and try again."
 

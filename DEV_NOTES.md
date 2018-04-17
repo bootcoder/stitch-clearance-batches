@@ -79,7 +79,7 @@ I left your specs as is as much as I could, they're your specs after all.
 
 -----
 
-Since we have no CI tool here, I'm using Guard / Guard-Rspec as my continuous integration equivalent.
+Since we have no CI tool here, I'm using Guard / Guard-Rspec as my continuous integration equivalent. The ```Guardfile``` is generated code.
 
 -----
 
@@ -92,7 +92,7 @@ Lastly, I upgraded to BS4 cause that's what the hip kids are using /s. Which ent
 
 #### Testing
 
-Mostly I TDD'd the app. There were a few instances of adding the spec after the fact. For instance, I wasn't sure what I expected back from CSV render until I made it happen.
+Mostly I TDD'd the app. There's always a few instances of adding specs after the fact. For instance, I wasn't sure what I expected back from CSV render until I made it happen.
 
 Specs include:
 - Full Feature coverage
