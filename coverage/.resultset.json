@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/support/csv_helper.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/support/csv_helper.rb": [
         1,
         1,
         null,
@@ -26,7 +26,7 @@
         null,
         null
       ],
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/support/capybara_helper.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/support/capybara_helper.rb": [
         1,
         null,
         1,
@@ -98,7 +98,7 @@
         null,
         null
       ],
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/controllers/clearance_batches_controller.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/controllers/clearance_batches_controller.rb": [
         1,
         null,
         null,
@@ -194,7 +194,7 @@
         null,
         null
       ],
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/controllers/application_controller.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/controllers/application_controller.rb": [
         1,
         null,
         null,
@@ -202,7 +202,7 @@
         1,
         null
       ],
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/features/clearance_batches_spec.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/features/clearance_batches_spec.rb": [
         1,
         null,
         1,
@@ -561,7 +561,7 @@
         null,
         null
       ],
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/models/item_spec.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/models/item_spec.rb": [
         1,
         null,
         1,
@@ -607,7 +607,7 @@
         null,
         null
       ],
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/models/item.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/models/item.rb": [
         1,
         null,
         1,
@@ -627,7 +627,7 @@
         null,
         null
       ],
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/services/clearancing_service_spec.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/spec/services/clearancing_service_spec.rb": [
         1,
         null,
         1,
@@ -816,7 +816,7 @@
         null,
         null
       ],
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/services/clearancing_service.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/services/clearancing_service.rb": [
         1,
         null,
         null,
@@ -914,7 +914,7 @@
         null,
         null
       ],
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/models/clearance_batch.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/models/clearance_batch.rb": [
         1,
         null,
         1,
@@ -929,13 +929,13 @@
         null,
         null
       ],
-      "/Users/bootcoderpro/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/models/style.rb": [
+      "/Users/apprentice/Dropbox/ACODE/adBC/stitch-fix-rails-project-2.2.3/app/models/style.rb": [
         1,
         1,
         1,
         null
       ]
     },
-    "timestamp": 1523914343
+    "timestamp": 1523924082
   }
 }

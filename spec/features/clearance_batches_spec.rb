@@ -151,7 +151,7 @@ describe "clearance_batch" do
           file_name = generate_csv_file(items)
           upload_batch_file(file_name)
           new_batch = ClearanceBatch.first
-          expect(page).to have_content("#{items.count} items clearanced in batch #{new_batch.id}")
+          expect(page).to have_content("#{items.count} Items clearanced into batch #{new_batch.id}")
           expect(page).not_to have_content("item ids raised errors and were not clearanced")
           within('table.completed_table') do
             expect(page.all('tr').count).to eq 1
@@ -168,8 +168,8 @@ describe "clearance_batch" do
           file_name     = generate_csv_file(valid_items + invalid_items)
           upload_batch_file(file_name)
           new_batch = ClearanceBatch.first
-          expect(page).to have_content("#{valid_items.count} items clearanced in batch #{new_batch.id}")
-          expect(page).to have_content("#{invalid_items.count} item ids raised errors and were not clearanced")
+          expect(page).to have_content("#{valid_items.count} Items clearanced into batch #{new_batch.id}")
+          expect(page).to have_content("#{invalid_items.count} ids raised errors and were not clearanced")
           within('table.completed_table') do
             expect(page).to have_content('Batch 1')
           end
@@ -183,9 +183,9 @@ describe "clearance_batch" do
           invalid_items = [[8675309], ['no thanks']]
           file_name     = generate_csv_file(invalid_items)
           upload_batch_file(file_name)
-          expect(page).not_to have_content("items clearanced in batch")
+          expect(page).not_to have_content("items clearanced into batch")
           expect(page).to have_content("No new clearance batch was added")
-          expect(page).to have_content("#{invalid_items.count} item ids raised errors and were not clearanced")
+          expect(page).to have_content("#{invalid_items.count} ids raised errors and were not clearanced")
           within('table.completed_table') do
             expect(page).not_to have_content(/Clearanced Batch \d+/)
           end
