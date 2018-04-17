@@ -2,12 +2,23 @@
   border: 2px solid black;
 }
 
+#completed_batches_title {
+  padding: 1%;
+  background-color: palegreen;
+}
+
+#in_progress_batches_title {
+  padding: 1%;
+  background-color: sandybrown;
+}
+
 .report-header h4 {
   text-align: center;
 }
 
 .report-btn {
-  margin: 0px 10px;
+  font-size: .85em;
+  margin: 0px 5px;
 }
 
 .report-row.gray-bg {
