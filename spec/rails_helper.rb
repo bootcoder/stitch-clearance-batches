@@ -12,6 +12,18 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
+require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
+
+def wait_for_ajax
+  Timeout.timeout(Capybara.default_max_wait_time) do
+    loop do
+      active = page.evaluate_script('jQuery.active')
+      break if active == 0
+    end
+  end
+end
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end

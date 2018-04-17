@@ -12,11 +12,11 @@ describe "clearance_batch" do
 
       it "displays a list of all past clearance batches" do
         visit "/"
-        expect(page).to have_content("Clearance Batches")
+        expect(page).to have_content("Completed Batches")
         within('table.clearance_batches') do
-          expect(page).to have_content("Clearance Batch #{clearance_batch_1.id}")
-          expect(page).to have_content("Clearance Batch #{clearance_batch_2.id}")
-          expect(page).to have_content("Clearance Batch #{clearance_batch_3.id}")
+          expect(page).to have_content(clearance_batch_1.title)
+          expect(page).to have_content(clearance_batch_2.title)
+          expect(page).to have_content(clearance_batch_3.title)
         end
       end
 
@@ -40,13 +40,13 @@ describe "clearance_batch" do
       end
     end
 
-    describe 'add a new clearance item' do
+    describe 'add a new clearance item', js: true do
       let!(:single_item) { FactoryBot.create(:item, color: 'gumdrop-glow') }
       let!(:other_item) { FactoryBot.create(:item, color: 'gumdrop-glow') }
 
       context 'VALID INPUT' do
         it 'allows a user to clearance a single item successfully' do
-          upload_single_item
+          upload_first_item
           expect(ClearanceBatch.last.items).to include single_item
         end
       end
@@ -54,24 +54,28 @@ describe "clearance_batch" do
       context 'INVALID INPUT' do
         it "'a' flashes error, does not alter DB" do
           upload_invalid_item("A")
+          expect(page).to have_content "is not valid"
         end
 
         it "'nil' flashes error, does not alter DB" do
           upload_invalid_item('nil')
+          expect(page).to have_content "is not valid"
         end
 
         it "789718972 flashes error, does not alter DB" do
           upload_invalid_item('789718972')
+          expect(page).to have_content "Item id 789718972 could not be found"
         end
 
         it "JS flashes error, does not alter DB" do
           upload_invalid_item('<script>alert("bad internet, go to your room!");</script>')
+          expect(page).to have_content 'is not valid'
         end
 
         it 'does not clearance duplicate items' do
-          upload_single_item
+          upload_first_item
           upload_single_item(single_item)
-          expect(page).to have_content "Item #{single_item.id} already clearanced"
+          expect(page).to have_content "Item id #{single_item.id} already clearanced"
         end
 
       end
@@ -79,13 +83,10 @@ describe "clearance_batch" do
       context 'adding a second item' do
 
         it 'to same batch' do
-          upload_single_item
-          within('table.in_progress_batches') do
-            btn = find("#in_progress_batch_#{Item.first.id}_radio")
-            choose(btn)
-          end
-          fill_in('item_id', with: '2')
+          upload_first_item
+          fill_in('item_id', with: other_item.id)
           click_button 'Clearance!'
+          wait_for_ajax
           within('table.in_progress_batches') do
             expect(page.all('tr').count).to eq 2
             expect(page.all('tr')[1].all('td')[2]).to have_content "2"
@@ -94,13 +95,11 @@ describe "clearance_batch" do
         end
 
         it 'to new batch' do
-          upload_single_item
-          within('table.in_progress_batches') do
-            btn = find("#new_batch_radio")
-            choose(btn)
-          end
-          fill_in('item_id', with: '2')
+          upload_first_item
+          find('#batch_select').find(:option, 'New Batch').select_option
+          fill_in('item_id', with: other_item.id)
           click_button 'Clearance!'
+          wait_for_ajax
           within('table.in_progress_batches') do
             expect(page.all('tr').count).to eq 3
             expect(page.all('tr')[1].all('td')[2]).to have_content "1"
@@ -111,19 +110,28 @@ describe "clearance_batch" do
         end
 
         it 'to different batch' do
-          other_batch = FactoryBot.create(:in_progress_batch)
-          upload_single_item
-
-          within('table.in_progress_batches') do
-            btn = find("#new_batch_radio")
-            choose(btn)
-          end
-          fill_in('item_id', with: '2')
+          FactoryBot.create(:in_progress_batch)
+          FactoryBot.create(:in_progress_batch)
+          visit '/'
+          find('#batch_select').find(:option, '1').select_option
+          fill_in('item_id', with: single_item.id)
           click_button 'Clearance!'
+          wait_for_ajax
           within('table.in_progress_batches') do
             expect(page.all('tr').count).to eq 3
-            expect(page.all('tr')[1].all('td')[2]).to have_content "1"
-            expect(page.all('tr')[2].all('td')[2]).to have_content "1"
+            expect(page.all('tr')[1].all('td')[2]).to have_content "6"
+            expect(page.all('tr')[2].all('td')[2]).to have_content "5"
+            expect(page).to have_content "In Progress Batch #{ClearanceBatch.first.id}"
+            expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
+          end
+          find('#batch_select').find(:option, '2').select_option
+          fill_in('item_id', with: other_item.id)
+          click_button 'Clearance!'
+          wait_for_ajax
+          within('table.in_progress_batches') do
+            expect(page.all('tr').count).to eq 3
+            expect(page.all('tr')[1].all('td')[2]).to have_content "6"
+            expect(page.all('tr')[2].all('td')[2]).to have_content "6"
             expect(page).to have_content "In Progress Batch #{ClearanceBatch.first.id}"
             expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
           end
@@ -134,7 +142,7 @@ describe "clearance_batch" do
 
     end
 
-    describe "add a new clearance batch" do
+    describe "add a new clearance batch", js: true do
 
       context "total success" do
 
@@ -146,7 +154,7 @@ describe "clearance_batch" do
           expect(page).to have_content("#{items.count} items clearanced in batch #{new_batch.id}")
           expect(page).not_to have_content("item ids raised errors and were not clearanced")
           within('table.clearance_batches') do
-            expect(page).to have_content(/Clearance Batch \d+/)
+            expect(page.all('tr').count).to eq 2
           end
         end
 
@@ -163,7 +171,7 @@ describe "clearance_batch" do
           expect(page).to have_content("#{valid_items.count} items clearanced in batch #{new_batch.id}")
           expect(page).to have_content("#{invalid_items.count} item ids raised errors and were not clearanced")
           within('table.clearance_batches') do
-            expect(page).to have_content(/Clearance Batch \d+/)
+            expect(page).to have_content(/Clearanced Batch \d+/)
           end
         end
 
@@ -179,7 +187,7 @@ describe "clearance_batch" do
           expect(page).to have_content("No new clearance batch was added")
           expect(page).to have_content("#{invalid_items.count} item ids raised errors and were not clearanced")
           within('table.clearance_batches') do
-            expect(page).not_to have_content(/Clearance Batch \d+/)
+            expect(page).not_to have_content(/Clearanced Batch \d+/)
           end
         end
       end
