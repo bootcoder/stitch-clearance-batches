@@ -42,15 +42,88 @@ describe "clearance_batch" do
 
     describe 'add a new clearance item' do
       let!(:single_item) { FactoryBot.create(:item, color: 'gumdrop-glow') }
+      let!(:other_item) { FactoryBot.create(:item, color: 'gumdrop-glow') }
 
-      context 'total success' do
-        it 'should allow a user to clearance a single item successfully' do
+      context 'VALID INPUT' do
+        it 'allows a user to clearance a single item successfully' do
           upload_single_item
+          expect(page).to have_content("Item #{single_item.id} Clearanced Successfully!")
           expect(ClearanceBatch.last.items).to include single_item
         end
       end
 
-      context 'total failure' do
+      context 'INVALID INPUT' do
+        it "'a' flashes error, does not alter DB" do
+          upload_invalid_item("A")
+        end
+
+        it "'nil' flashes error, does not alter DB" do
+          upload_invalid_item('nil')
+        end
+
+        it "789718972 flashes error, does not alter DB" do
+          upload_invalid_item('789718972')
+        end
+
+        it "JS flashes error, does not alter DB" do
+          upload_invalid_item('<script>alert("ohhh noooo");</script>')
+        end
+
+      end
+
+      context 'adding a second item' do
+
+        it 'to same batch' do
+          upload_single_item
+          within('table.open_batches') do
+            btn = find("#open_batch_#{Item.first.id}_radio")
+            choose(btn)
+          end
+          fill_in('item_id', with: '2')
+          click_button 'Clearance!'
+          within('table.open_batches') do
+            expect(page.all('tr').count).to eq 2
+            expect(page.all('tr')[1].all('td')[2]).to have_content "2"
+            expect(page).to have_content "Open Batch #{ClearanceBatch.last.id}"
+          end
+        end
+
+        it 'to new batch' do
+          upload_single_item
+          within('table.open_batches') do
+            btn = find("#new_batch_radio")
+            choose(btn)
+          end
+          fill_in('item_id', with: '2')
+          click_button 'Clearance!'
+          within('table.open_batches') do
+            expect(page.all('tr').count).to eq 3
+            expect(page.all('tr')[1].all('td')[2]).to have_content "1"
+            expect(page.all('tr')[2].all('td')[2]).to have_content "1"
+            expect(page).to have_content "Open Batch #{ClearanceBatch.first.id}"
+            expect(page).to have_content "Open Batch #{ClearanceBatch.last.id}"
+          end
+        end
+
+        it 'to different batch' do
+          other_batch = FactoryBot.create(:open_batch)
+          upload_single_item
+
+          within('table.open_batches') do
+            btn = find("#new_batch_radio")
+            choose(btn)
+          end
+          fill_in('item_id', with: '2')
+          click_button 'Clearance!'
+          within('table.open_batches') do
+            expect(page.all('tr').count).to eq 3
+            expect(page.all('tr')[1].all('td')[2]).to have_content "1"
+            expect(page.all('tr')[2].all('td')[2]).to have_content "1"
+            expect(page).to have_content "Open Batch #{ClearanceBatch.first.id}"
+            expect(page).to have_content "Open Batch #{ClearanceBatch.last.id}"
+          end
+        end
+
 
       end
 
