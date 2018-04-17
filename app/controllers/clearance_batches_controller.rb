@@ -3,7 +3,8 @@ require 'csv'
 class ClearanceBatchesController < ApplicationController
 
   def index
-    @open_batches = ClearanceBatch.open
+    batches = ClearanceBatch.in_progress.order(updated_at: :desc)
+    @in_progress_batches = batches.to_a << ClearanceBatch.new
     @clearance_batches  = ClearanceBatch.completed
   end
 
@@ -37,25 +38,16 @@ class ClearanceBatchesController < ApplicationController
       end
 
     elsif clearance_params[:batch_id]
-      batch = ClearanceBatch.find_by(id: clearance_params[:batch_id])
+      batch = clearance_params[:batch_id] == "new" ? ClearanceBatch.new : ClearanceBatch.find_by(id: clearance_params[:batch_id])
       item = Item.find_by(id: clearance_params[:item_id])
-      if batch && item
+      if item && batch.save
         item.clearance!
         batch.items << item
-      end
-      if item.save
-        flash[:notice]  = "Item #{item.id} Clearanced Successfully!"
-      else
-        alert_messages << 'Could not find an Item with that ID, please try again.'
-      end
-
-    else
-      batch = ClearanceBatch.create
-      item = Item.find_by(id: params[:item_id])
-      if item
-        item.clearance!
-        batch.items << item
-        flash[:notice]  = "Item #{item.id} Clearanced Successfully!"
+        if item.save
+          flash[:notice]  = "Item #{item.id} Clearanced Successfully!"
+        else
+          alert_messages << "Could not clearance Item #{item.id}"
+        end
       else
         alert_messages << 'Could not find an Item with that ID, please try again.'
       end
