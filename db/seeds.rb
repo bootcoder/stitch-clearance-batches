@@ -7,6 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 if Style.count <= 0
+
 def make_items(style,color,sizes: { 'M' => 10, 'S' => 5, 'L' => 10 })
   sizes.each do |size,count|
     count.times do
