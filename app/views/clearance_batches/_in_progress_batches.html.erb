@@ -1,12 +1,12 @@
-<div class='in_progress_batches_container container'>
-  <h3>In Progress Batches</h3>
+<div class='in_progress_batches_container container-fluid'>
+  <h3 id='in_progress_batches_title'>In Progress Batches</h3>
   <table class="table table-striped in_progress_batches">
     <thead class='text-center'>
       <tr>
-        <th scope='col' >ID</th>
-        <th scope='col' >Date Updated</th>
-        <th scope='col' >Total Items</th>
-        <th scope='col' >Options</th>
+        <th scope='col' style="width: 25%">ID</th>
+        <th scope='col' style="width: 25%">Date Updated</th>
+        <th scope='col' style="width: 25%">Total Items</th>
+        <th scope='col' style="width: 25%">Options</th>
       </tr>
     </thead>
     <tbody id="in_progress_rows">
@@ -18,7 +18,7 @@
           <td>
             <div class='btn-group'>
               <%= button_to 'View', clearance_batch_path(batch), class: 'report-btn html-btn btn btn-secondary', method: 'get' %>
-              <%= button_to 'Close', clearance_batch_path(batch), class: 'report-btn html-btn btn btn-warning', name: 'close_batch', remote: true, method: :patch %>
+              <%= button_to 'Complete', clearance_batch_path(batch), class: 'report-btn html-btn btn btn-warning', name: 'close_batch', remote: true, method: :patch %>
             </div>
           </td>
         </tr>

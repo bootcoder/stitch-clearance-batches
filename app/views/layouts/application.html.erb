@@ -7,12 +7,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<div class="container">
-  <h1 class='text-center'><%= link_to image_tag('stitchfix.png', class: 'hero-img'), root_path %></h1>
-  <%= render partial: 'notifications' %>
-  <%= yield %>
+<div class='text-center'>
+  <%= link_to image_tag('stitchfix.png', class: 'hero-img'), root_path %>
 </div>
+<%= render partial: 'notifications' %>
+<%= yield %>
 
 </body>
 </html>
