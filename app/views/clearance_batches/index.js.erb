@@ -1,3 +1,4 @@
 $('#index_tables_container').html("<%= j render partial: 'index_tables' %>")
 $('#notifications').html("<%= j render partial: 'notifications' %>")
-$()
+$('#index_form').trigger('reset')
+$('#item_id_input').focus()
