@@ -17,10 +17,6 @@ module CapybaraHelper
     within('table.clearance_batches') do
       expect(page).not_to have_content(/Clearance Batch \d+/)
     end
-    within('table.open_batches') do
-      btn = find("#open_batch_#{Item.first.id}_radio")
-      choose(btn)
-    end
     fill_in('item_id', with: '1')
     click_button 'Clearance!'
     within('table.open_batches') do

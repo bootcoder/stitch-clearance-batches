@@ -1,73 +1,16 @@
 <h2></h2>
 
 <div class='container text-right'>
-  <div class='row'>
-    <%= form_tag(clearance_batches_path, multipart: true, class: 'form col-md-12', role: 'form') do %>
-      <div class="form-group">
-        <%= label_tag 'item_id', 'Clearance individual item' %>
-        <%= text_field_tag 'item_id', nil, placeholder: '(single item csv)', class: 'form-control' %>
-        <%= label_tag 'csv_file', 'Or upload CSV batch file' %>
-        <%= file_field_tag 'csv_file', class: 'form-control' %>
-      </div>
-      <%= button_tag 'Clearance!', class: 'btn btn-primary' %>
-    <% end %>
-  </div>
+  <%= form_tag(clearance_batches_path, multipart: true, class: 'form col-md-12', role: 'form') do %>
+    <div class="form-group">
+      <%= label_tag 'item_id', 'Clearance individual item' %>
+      <%= text_field_tag 'item_id', nil, placeholder: '(single item csv)', class: 'form-control', autofocus: true %>
+      <%= label_tag 'csv_file', 'Or upload CSV batch file' %>
+      <%= file_field_tag 'csv_file', class: 'form-control' %>
+    </div>
+    <%= button_tag 'Clearance!', class: 'btn btn-primary' %>
+    <!-- Form Continues into In Progress batches -->
+    <%= render partial: 'in_progress_batches' %>
+  <% end %>
+  <%= render partial: 'clearance_batches' %>
 </div>
-
-<h2>Open Clearance Batches</h2>
-<table class="table table-striped open_batches">
-  <thead class='text-center'>
-    <tr>
-      <th>&nbsp;</th>
-      <th scope='col' >ID</th>
-      <th scope='col' >Date clearanced</th>
-      <th scope='col' >Number of items clearanced</th>
-      <th scope='col' >Reports</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%- @open_batches.each do |open_batch| -%>
-      <tr class='batch-row text-center'>
-        <td><input type="radio" id="open_batch_<%= open_batch.id %>_radio" class="open_batch_radio" ></td>
-        <td scope='row'>Open Batch <%= open_batch.id %></td>
-        <td><%= l(open_batch.created_at, format: :short) %></td>
-        <td><%= open_batch.items.count %></td>
-        <td>
-          <div class='btn-group'>
-            <%= button_to "HTML", clearance_batch_path(open_batch), method: :get, class: 'report-btn html-btn btn btn-secondary'  %>
-            <%= button_to "Close", '#', method: :put, class: 'report-btn pdf-btn btn btn-warning'  %>
-          </div>
-        </td>
-      </tr>
-    <%- end -%>
-  </tbody>
-</table>
-
-<h2>Completed Clearance Batches</h2>
-
-<table class="table table-striped clearance_batches">
-  <thead class='text-center'>
-    <tr>
-      <th scope='col' >ID</th>
-      <th scope='col' >Date clearanced</th>
-      <th scope='col' >Number of items clearanced</th>
-      <th scope='col' >Reports</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%- @clearance_batches.each do |clearance_batch| -%>
-      <tr class='batch-row text-center'>
-        <td scope='row'>Clearance Batch <%= clearance_batch.id %></td>
-        <td><%= l(clearance_batch.created_at, format: :short) %></td>
-        <td><%= clearance_batch.items.count %></td>
-        <td>
-          <div class='btn-group'>
-            <%= button_to "HTML", clearance_batch_path(clearance_batch), method: :get, class: 'report-btn html-btn btn btn-secondary'  %>
-            <%= button_to "PDF", clearance_batch_path(clearance_batch, format: :pdf), method: :get, class: 'report-btn pdf-btn btn btn-secondary'  %>
-            <%= button_to "CSV", clearance_batch_path(clearance_batch, format: :csv), method: :get, class: 'report-btn csv-btn btn btn-secondary'  %>
-          </div>
-        </td>
-      </tr>
-    <%- end -%>
-  </tbody>
-</table>

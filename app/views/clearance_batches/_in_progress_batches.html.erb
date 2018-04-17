@@ -1,0 +1,39 @@
+<h2>In Progress Clearance Batches</h2>
+    <table class="table table-striped in_progress_batches">
+      <thead class='text-center'>
+        <tr>
+          <th>&nbsp;</th>
+          <th scope='col' >ID</th>
+          <th scope='col' >Date clearanced</th>
+          <th scope='col' >Number of items clearanced</th>
+          <th scope='col' >Reports</th>
+        </tr>
+      </thead>
+      <tbody id="in_progress_rows">
+        <% @in_progress_batches.each_with_index do |batch, idx| %>
+          <% check_val = idx == 0 ? true : false %>
+          <% if batch.id %>
+            <tr class='batch-row text-center'>
+              <td><%= radio_button_tag(:batch_id, "#{batch.id}", check_val) %></td>
+              <td scope='row'>In Progress Batch <%= batch.id %></td>
+              <td><%= l(batch.created_at, format: :short) %></td>
+              <td><%= batch.items.count %></td>
+              <td>
+                <div class='btn-group'>
+                  <%= button_to "HTML", clearance_batch_path(batch), method: :get, class: 'report-btn html-btn btn btn-secondary'  %>
+                  <%= button_to "Close", '#', method: :put, class: 'report-btn pdf-btn btn btn-warning'  %>
+                </div>
+              </td>
+            </tr>
+          <% else %>
+            <tr class='batch-row text-center'>
+              <td><%= radio_button_tag(:batch_id, 'new', check_val) %></td>
+              <td scope='row'>New Batch</td>
+              <td>N/A</td>
+              <td>0</td>
+              <td>N/A</td>
+            </tr>
+          <% end %>
+        <%- end -%>
+      </tbody>
+    </table>
