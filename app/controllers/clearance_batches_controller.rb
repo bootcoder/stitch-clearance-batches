@@ -24,24 +24,18 @@ class ClearanceBatchesController < ApplicationController
     end
   end
 
-  def update
-    batch = ClearanceBatch.find(params[:id])
-    if clearance_params[:close_batch] && batch
-      batch.update_attributes(in_progress: false)
-      flash[:notice] = "Clearance Batch #{batch.id} successfully closed"
-    else
-      flash[:alert] = "Error closing batch #{params[:id]}, refresh and try again."
-    end
-    redirect_to action: :index
-  end
-
   def create
+    # NOTE: handles create for csv and item into a batch.
+    # feel kinda icky about the nonRESTfullness but didn't feel
+    # an Items controller was the solution either
+
     alert_messages     = []
     notice_messages    = []
 
     if clearance_params[:csv_file]
+
       clearancing_status = ClearancingService.new.process_file(clearance_params[:csv_file].tempfile)
-      batch    = clearancing_status.batch
+      batch = clearancing_status.batch
       if batch.persisted?
         batch.update_attributes(in_progress: false)
         notice_messages << "#{batch.items.count} items clearanced in batch #{batch.id}"
@@ -54,6 +48,7 @@ class ClearanceBatchesController < ApplicationController
       end
 
     elsif clearance_params[:batch_id]
+
       clearancing_status = ClearancingService.new.process_item(
         clearance_params[:item_id],
         ClearanceBatch.find_by(id: clearance_params[:batch_id]))
@@ -65,12 +60,32 @@ class ClearanceBatchesController < ApplicationController
       else
         alert_messages << "No new clearance batch was added"
       end
+
+    else
+
+      alert_messages << "You must enter an Item id or CSV file to clearance items"
+
     end
 
     flash[:alert] = alert_messages.join("<br/>") if alert_messages.any?
     flash[:notice] = notice_messages.join("<br/>") if notice_messages.any?
     redirect_to action: :index
 
+  end
+
+  def update
+    batch = ClearanceBatch.find_by(id: params[:id])
+    if !batch
+      flash[:alert] = "Could not find batch id #{params[:id]}"
+    elsif !batch.in_progress
+      flash[:alert] = "Batch id #{params[:id]} is already closed"
+    elsif clearance_params[:close_batch]
+      batch.update_attributes(in_progress: false)
+      flash[:notice] = "Clearance Batch #{batch.id} successfully closed"
+    else
+      flash[:alert] = "Failed to update batch #{params[:id]}, refresh and try again."
+    end
+    redirect_to action: :index
   end
 
   private
