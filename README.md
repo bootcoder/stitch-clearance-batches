@@ -1,3 +1,6 @@
+## Hunter's (That's a ME!) Dev Notes
+ Can be viewed [here](./DEV_NOTES.md).
+
 # Problem
 
 We need to clearance inventory from time to time.  Certain items don't sell through to our clients, so every month, we collect certain unsold items and sell them to a third party vendor for a portion of their wholesale price.
