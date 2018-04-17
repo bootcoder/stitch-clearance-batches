@@ -9,6 +9,9 @@ gem "jquery-rails"
 gem 'sprockets-rails'
 gem "bootstrap"
 
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
+
 group :test do
   gem "rspec-rails"
   gem "factory_bot_rails"
@@ -19,7 +22,6 @@ group :test do
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
   gem 'simplecov', require: false
-
 end
 
 group :test, :development do
@@ -30,12 +32,9 @@ group :test, :development do
   gem 'guard-livereload'
 end
 
-
+# NOTE: Note needed, just my preferred development set.
 gem 'extra_print'
 gem 'pry-rails'
 gem 'pry-byebug'
 gem 'better_errors'
 gem 'binding_of_caller'
-
-gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary'

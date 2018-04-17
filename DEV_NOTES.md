@@ -4,11 +4,9 @@
 
 #### Intro:
 
-Hi! And thanks for taking time to review my code.
+Hi! And thanks for taking time to review my code. Hopefully you're into this kinda thing! (code reviews that is)
 
-There are more casual comments strewn about than is my norm. I felt it OK to justify things for you the reviewer as I went, since we have no pre-established feedback loop.
-
-Search through the project for case-sensitive 'NOTE:' to see specific comments left for you.
+There are more casual comments strewn about than is my norm. I felt it OK to justify things for you the reviewer as I went, since we have no pre-established feedback loop. Search through the project for case-sensitive 'NOTE:' to see specific comments left just for you.
 
 #### Git
 
@@ -21,7 +19,6 @@ git diff 7aedf84 ':(exclude)public/assets/*'
 This will show the work from my current commit back to the initial commit and will leave off all the messy rails code that doesn't belong to me anyhow.
 
 Ordinarily I would clean this up and squash these 60 or so commits down into 3-4 before opening a PR. I left them in their granular form here so you could better see my flow if you desire. That said, I'd also like to mention that I could have (and usually do) committed more often.
-
 
 #### Build mentality:
 
@@ -72,10 +69,9 @@ I took the opportunity to refactor your existing code. ```ClearancingService``` 
 
 At first I left ```ClearancingService``` alone, just modifying it a scoach to handle items. After I hit MVP I gave it another look and decided there was a lot of room for growth.
 
-```ClearancingService``` now handles: all input types, generates the bulk of flash messages for the controller#create, and is much easier to read / test.
+Class ```ClearancingService``` now handles: all input types, generates the bulk of flash messages for the controller#create, and is much easier to read / test.
 
-
-I left your specs as is as much as I could, they're your specs after all.
+I left your specs as is as much as I could, they're your specs after all. Also this ensured all original functionality remained in place.
 
 -----
 
@@ -87,8 +83,7 @@ If you're uploading the same sample CSV you sent out. It still works, but you wi
 
 -----
 
-Lastly, I upgraded to BS4 cause that's what the hip kids are using /s. Which entailed upgrading several other parts of the app as well. A quick ```bundle install``` will have you all set. (Sorry about Nokogiri & EventMachine) App runs on Ruby Version ```2.4.2``` the README.
-
+Lastly, I upgraded to BS4 cause that's what the hip kids are using /s. Then upgraded several other parts of the app as well. A quick ```bundle install``` will have you all set. (Sorry about Nokogiri & EventMachine) App runs on Ruby Version ```2.4.2``` per the README.
 
 #### Testing
 
@@ -122,4 +117,4 @@ You may need the following installed to run specs:
 
 #### One more thing
 
-<img src="https://media.giphy.com/media/16tNp8LB7MS0o/giphy.gif" />
+<img src="https://media.giphy.com/media/16tNp8LB7MS0o/giphy.gif" alt='happy-coding' />
