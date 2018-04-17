@@ -108,11 +108,12 @@ describe ClearanceBatchesController, type: :controller do
       end
     end
 
-    context "INVALID INPUT" do
-      it "" do
+    # Already coving this pretty well in features. May come back...
+    # context "INVALID INPUT" do
+    #   it "" do
 
-      end
-    end
+    #   end
+    # end
   end
 
 end
