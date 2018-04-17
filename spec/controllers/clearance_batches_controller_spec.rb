@@ -87,8 +87,7 @@ describe ClearanceBatchesController, type: :controller do
         expect(ClearanceBatch.count).to eq 0
         expect(items.first.status).to eq 'sellable'
 
-        post :create, params: { item_id: items.first }
-
+        post :create, params: { item_id: items.first, batch_id: 'new' }
         expect(Item.find(items.first.id).status).to eq 'clearanced'
         expect(ClearanceBatch.last.items).to eq [items.first]
       end
