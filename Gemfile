@@ -13,6 +13,7 @@ group :test, :development do
   gem "rspec-rails"
   gem "factory_bot_rails"
   gem "capybara"
+  gem 'poltergeist'
   gem "database_cleaner"
   gem "ruby_css_lint"
   gem "selenium-webdriver"
