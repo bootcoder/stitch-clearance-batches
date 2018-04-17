@@ -14,7 +14,9 @@ Search through the project for case-sensitive 'NOTE:' to see specific comments l
 
 Inspection. If you want to run a diff on my code. (Since we won't be opening a PR on GitHub) I suggest using:
 
-```git diff 5eec546 ':(exclude)public/assets/*'```
+```bash
+git diff 5eec546 ':(exclude)public/assets/*'
+```
 
 This will show the work from my current commit back to the initial commit and will leave off all the messy rails code that doesn't belong to me anyhow.
 
@@ -73,6 +75,10 @@ I took the opportunity to refactor your existing code. ```ClearancingService``` 
 At first I left ```ClearancingService``` alone, just modifying it a scoach to handle items. After I hit MVP I gave it another look and decided there was a lot of room for growth.
 
 I left your specs as is as much as I could, they're your specs after all.
+
+-----
+
+Since we have no CI tool here, I'm using Guard / Guard-Rspec as my continuous integration equivalent.
 
 -----
 
