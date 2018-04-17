@@ -14,7 +14,7 @@
       <img src="./assets/0.10.2/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2018-04-16T17:14:43-07:00">2018-04-16T17:14:43-07:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2018-04-17T11:54:42-07:00">2018-04-17T11:54:42-07:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -885,13 +885,13 @@
         <li class="covered" data-hits="52" data-linenumber="10">
           <span class="hits">52</span>
           
-          <code class="ruby">  scope :in_progress, -&gt; { where(in_progress: true).order(updated_at: :desc) }</code>
+          <code class="ruby">  scope :in_progress, -&gt; { includes(:items).where(in_progress: true).order(updated_at: :desc) }</code>
         </li>
       
         <li class="covered" data-hits="52" data-linenumber="11">
           <span class="hits">52</span>
           
-          <code class="ruby">  scope :completed, -&gt; { where(in_progress: false).order(updated_at: :desc) }</code>
+          <code class="ruby">  scope :completed, -&gt; { includes(:items).where(in_progress: false).order(updated_at: :desc) }</code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="12">
