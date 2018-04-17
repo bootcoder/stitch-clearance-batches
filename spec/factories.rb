@@ -1,7 +1,7 @@
 FactoryBot.define do
 
   factory :clearance_batch do
-    in_progress false
+    active false
     factory :clearance_batch_with_items do
       transient do
         items_count 5
@@ -9,8 +9,8 @@ FactoryBot.define do
       after(:create) do |clearance_batch, evaluator|
         create_list(:clearance_item, evaluator.items_count, clearance_batch: clearance_batch)
       end
-      factory :in_progress_batch do
-        in_progress true
+      factory :active_batch do
+        active true
       end
     end
   end

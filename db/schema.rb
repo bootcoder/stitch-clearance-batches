@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_13_074213) do
+ActiveRecord::Schema.define(version: 2018_04_17_210130) do
 
   create_table "clearance_batches", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "in_progress", default: true
+    t.boolean "active", default: true
   end
 
   create_table "items", force: :cascade do |t|

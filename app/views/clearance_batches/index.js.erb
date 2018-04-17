@@ -1,4 +1,4 @@
-$('#in_progress_table_container').html("<%= j render partial: 'table', locals: {batches: @in_progress_batches, table_state: 'in_progress'} %>")
+$('#active_table_container').html("<%= j render partial: 'table', locals: {batches: @active_batches, table_state: 'active'} %>")
 $('#completed_table_container').html("<%= j render partial: 'table', locals: {batches: @completed_batches, table_state: 'completed'} %>")
 $('#index_form_container').replaceWith("<%= j render partial: 'index_form' %>")
 $('#notifications').html("<%= j render partial: 'notifications' %>")

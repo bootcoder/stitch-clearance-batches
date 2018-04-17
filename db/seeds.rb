@@ -64,7 +64,7 @@ end
   rand(5..20).times do
     batch = ClearancingService.new(item_id: rand(1..Item.count), batch: batch).batch
   end
-  batch.update_attributes(in_progress: false)
+  batch.update_attributes(active: false)
 end
 
 5.times do

@@ -1,11 +1,11 @@
 class ClearanceBatchesController < ApplicationController
 
 
-  # NOTE: Split batches into two groups for in_progress and completed
+  # NOTE: Split batches into two groups for active and completed
   # Started out with several Ajax views but ultimately decided things were small
   # enough to simply re-render index asynchronously
   def index
-    @in_progress_batches = ClearanceBatch.in_progress
+    @active_batches = ClearanceBatch.active
     @completed_batches  = ClearanceBatch.completed
 
     respond_to do |format|
@@ -46,7 +46,7 @@ class ClearanceBatchesController < ApplicationController
         batch: ClearanceBatch.find_by(id: clearance_params[:batch_id])).execute!
       # CSV batches are automatically closed after processing.
       if service.batch.persisted? && clearance_params[:csv_file]
-        service.batch.update_attributes(in_progress: false)
+        service.batch.update_attributes(active: false)
       end
 
       # Put together various flash msgs for after action report.
@@ -62,18 +62,18 @@ class ClearanceBatchesController < ApplicationController
     if !batch
       flash[:alert] = "Could not find batch id #{params[:id]}."
 
-    elsif !batch.in_progress && clearance_params[:close_batch]
+    elsif !batch.active && clearance_params[:close_batch]
       flash[:alert] = "Batch id #{params[:id]} is already closed."
 
-    elsif batch.in_progress && clearance_params[:open_batch]
+    elsif batch.active && clearance_params[:open_batch]
       flash[:alert] = "Batch id #{params[:id]} is already open."
 
     elsif clearance_params[:close_batch]
-      batch.update_attributes(in_progress: false)
+      batch.update_attributes(active: false)
       flash[:notice] = "Clearance Batch #{batch.id} successfully closed."
 
     elsif clearance_params[:open_batch]
-      batch.update_attributes(in_progress: true)
+      batch.update_attributes(active: true)
       flash[:notice] = "Clearance Batch #{batch.id} reopened."
 
     else

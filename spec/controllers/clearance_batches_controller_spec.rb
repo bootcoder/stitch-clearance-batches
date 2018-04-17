@@ -6,13 +6,13 @@ describe ClearanceBatchesController, type: :controller do
 
     let!(:batch_1) { FactoryBot.create(:clearance_batch_with_items)}
     let!(:batch_2) { FactoryBot.create(:clearance_batch_with_items)}
-    let!(:in_progress_batch) { FactoryBot.create(:in_progress_batch)}
+    let!(:active_batch) { FactoryBot.create(:active_batch)}
 
     before(:each) { get :index }
 
     it "assigns all batches" do
       expect(assigns(:completed_batches)).to eq [batch_2, batch_1]
-      expect(assigns(:in_progress_batches)).to eq [in_progress_batch]
+      expect(assigns(:active_batches)).to eq [active_batch]
     end
 
     it "renders the index template with 200" do
@@ -52,7 +52,7 @@ describe ClearanceBatchesController, type: :controller do
   describe "UPDATE" do
 
     context "closes a batch and flashes success" do
-      let!(:batch) {FactoryBot.create(:in_progress_batch)}
+      let!(:batch) {FactoryBot.create(:active_batch)}
       before(:each) { put :update, params: { id: batch, close_batch: '' } }
 
       it { should set_flash[:notice].to include "Clearance Batch #{batch.id} successfully closed" }
@@ -63,7 +63,7 @@ describe ClearanceBatchesController, type: :controller do
       end
 
       it "closes the batch" do
-        expect(ClearanceBatch.find(batch.id).in_progress).to eq false
+        expect(ClearanceBatch.find(batch.id).active).to eq false
       end
     end
 
@@ -79,7 +79,7 @@ describe ClearanceBatchesController, type: :controller do
       end
 
       it "closes the batch" do
-        expect(ClearanceBatch.find(batch.id).in_progress).to eq true
+        expect(ClearanceBatch.find(batch.id).active).to eq true
       end
     end
 
@@ -90,13 +90,13 @@ describe ClearanceBatchesController, type: :controller do
     end
 
     context "does not update a previously open batch" do
-      let!(:open_batch) { FactoryBot.create(:in_progress_batch)}
+      let!(:open_batch) { FactoryBot.create(:active_batch)}
       before(:each) { put :update, params: { id: open_batch, open_batch: '' } }
       it { should set_flash[:alert].to include "Batch id #{open_batch.id} is already open." }
     end
 
     context "fails to update without close_batch param" do
-      let!(:batch) { FactoryBot.create(:in_progress_batch)}
+      let!(:batch) { FactoryBot.create(:active_batch)}
       before(:each) { put :update, params: { id: batch} }
       it { should set_flash[:alert].to include "Failed to update batch #{batch.id}, refresh and try again." }
     end

@@ -35,9 +35,9 @@ The CSS transition of the help div in lieu of JS however is a cool thing I can p
 
 #### General Notes:
 
-The biggest thing to talk about is what you're probably thinking right now... 'What is an In Progress Batch? Why do we need it?'
+The biggest thing to talk about is what you're probably thinking right now... 'What is an Active Batch? Why do we need it?'
 
-A large design decision around in_progress VS completed ClearanceBatches
+A large design decision around active VS completed ClearanceBatches
 came up as I was considering how to build out the app.
 
 I felt if a user is adding items via a scan tool they would most likely need
@@ -47,11 +47,11 @@ out the requirements which drove a significant portion of the development therea
 I felt the best way to represent these states was with a flag attached to the batch itself.
 To do so cleanly I made a change in the schema. Along with doubling the number of tables displayed on index.
 
-I could have accomplished my goal without these departures from the original product. Implementation would have been icky and not in line with the 'Rails Way'. And since the README specifically states changing schema as an option I felt it OK.
+I could have accomplished my goal without these departures from the original product. Implementation would have been icky and not in line with the 'Rails Way'. And since the README specifically states changing schema as an option I felt it OK. Side Note on migrations, I originally called Active attr Open. That was a poor attr name choice. I removed that migration before submission. Just saying I know in real life you shouldn't go back and rm old migrations.
 
 Specifically to that tables, Just one table displaying both batch states would be cumbersome for the user as the app scales.
 
-Overall I maintain ```in_progress_batches``` was a solid choice as the increase in usability and functionality is substantial.
+Overall I maintain ```active_batches``` was a solid choice as the increase in usability and functionality is substantial.
 
 -----
 

@@ -87,10 +87,10 @@ describe "clearance_batch" do
           fill_in('item_id', with: other_item.id)
           click_button 'Clearance Item!'
           wait_for_ajax
-          within('table.in_progress_table') do
+          within('table.active_table') do
             expect(page.all('tr').count).to eq 1
             expect(page.all('tr')[0].all('td')[1]).to have_content "2"
-            expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
+            expect(page).to have_content "Active Batch #{ClearanceBatch.last.id}"
           end
         end
 
@@ -100,40 +100,40 @@ describe "clearance_batch" do
           fill_in('item_id', with: other_item.id)
           click_button 'Clearance Item!'
           wait_for_ajax
-          within('table.in_progress_table') do
+          within('table.active_table') do
             expect(page.all('tr').count).to eq 2
             expect(page.all('tr')[0].all('td')[1]).to have_content "1"
             expect(page.all('tr')[1].all('td')[1]).to have_content "1"
-            expect(page).to have_content "In Progress Batch #{ClearanceBatch.first.id}"
-            expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
+            expect(page).to have_content "Active Batch #{ClearanceBatch.first.id}"
+            expect(page).to have_content "Active Batch #{ClearanceBatch.last.id}"
           end
         end
 
         it 'to different batch' do
-          FactoryBot.create(:in_progress_batch)
-          FactoryBot.create(:in_progress_batch)
+          FactoryBot.create(:active_batch)
+          FactoryBot.create(:active_batch)
           visit '/'
           find('#batch_select').find(:option, '1').select_option
           fill_in('item_id', with: single_item.id)
           click_button 'Clearance Item!'
           wait_for_ajax
-          within('table.in_progress_table') do
+          within('table.active_table') do
             expect(page.all('tr').count).to eq 2
             expect(page.all('tr')[0].all('td')[1]).to have_content "6"
             expect(page.all('tr')[1].all('td')[1]).to have_content "5"
-            expect(page).to have_content "In Progress Batch #{ClearanceBatch.first.id}"
-            expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
+            expect(page).to have_content "Active Batch #{ClearanceBatch.first.id}"
+            expect(page).to have_content "Active Batch #{ClearanceBatch.last.id}"
           end
           find('#batch_select').find(:option, '2').select_option
           fill_in('item_id', with: other_item.id)
           click_button 'Clearance Item!'
           wait_for_ajax
-          within('table.in_progress_table') do
+          within('table.active_table') do
             expect(page.all('tr').count).to eq 2
             expect(page.all('tr')[0].all('td')[1]).to have_content "6"
             expect(page.all('tr')[1].all('td')[1]).to have_content "6"
-            expect(page).to have_content "In Progress Batch #{ClearanceBatch.first.id}"
-            expect(page).to have_content "In Progress Batch #{ClearanceBatch.last.id}"
+            expect(page).to have_content "Active Batch #{ClearanceBatch.first.id}"
+            expect(page).to have_content "Active Batch #{ClearanceBatch.last.id}"
           end
         end
 
@@ -194,31 +194,31 @@ describe "clearance_batch" do
     end
 
     describe 'Batch State', js: true do
-      let!(:in_progress_batch) { FactoryBot.create(:in_progress_batch)}
+      let!(:active_batch) { FactoryBot.create(:active_batch)}
       let!(:completed_batch) { FactoryBot.create(:clearance_batch_with_items)}
 
-      it "an in progress batch can be closed" do
+      it "an active batch can be closed" do
         visit('/')
         expect(page.all('table.completed_table tr').count).to eq 1
-        expect(page.all('table.in_progress_table tr').count).to eq 1
-        within('table.in_progress_table') do
+        expect(page.all('table.active_table tr').count).to eq 1
+        within('table.active_table') do
           first('.close-btn').click
           wait_for_ajax
         end
         expect(page.all('table.completed_table tr').count).to eq 2
-        expect(page.all('table.in_progress_table tr').count).to eq 0
+        expect(page.all('table.active_table tr').count).to eq 0
       end
 
       it "a completed batch can be reopened" do
         visit('/')
         expect(page.all('table.completed_table tr').count).to eq 1
-        expect(page.all('table.in_progress_table tr').count).to eq 1
+        expect(page.all('table.active_table tr').count).to eq 1
         within('table.completed_table') do
           first('.open-btn').click
           wait_for_ajax
         end
         expect(page.all('table.completed_table tr').count).to eq 0
-        expect(page.all('table.in_progress_table tr').count).to eq 2
+        expect(page.all('table.active_table tr').count).to eq 2
       end
     end
 

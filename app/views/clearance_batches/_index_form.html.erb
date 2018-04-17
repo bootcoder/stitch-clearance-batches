@@ -16,8 +16,8 @@
 
       <div class='form-group col-md-4'>
         <%= f.text_field 'item_id', id: 'item_id_input', class: 'form-control', placeholder: 'Single Item ID', autofocus: true, autocomplete: 'off' %>
-        <% if @in_progress_batches.any? %>
-          <%= f.select 'batch_id', options_from_collection_for_select(@in_progress_batches, :id, :title, @in_progress_batches.first.id.to_s), {include_blank: 'New Batch'}, {id: 'batch_select', class: 'form-control'} %>
+        <% if @active_batches.any? %>
+          <%= f.select 'batch_id', options_from_collection_for_select(@active_batches, :id, :title, @active_batches.first.id.to_s), {include_blank: 'New Batch'}, {id: 'batch_select', class: 'form-control'} %>
         <% else %>
           <%= f.select 'batch_id', ['New Batch'], {}, {class: 'form-control'} %>
         <% end %>

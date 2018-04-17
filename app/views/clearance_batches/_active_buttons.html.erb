@@ -1,0 +1,4 @@
+<div class='btn-group'>
+  <%= button_to 'View', clearance_batch_path(batch), class: 'active-button html-btn btn btn-info', method: 'get' %>
+  <%= button_to 'Complete', clearance_batch_path(batch), class: 'active-button close-btn btn btn-success', name: 'close_batch', remote: true, method: :patch %>
+</div>
