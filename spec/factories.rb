@@ -1,12 +1,16 @@
 FactoryBot.define do
 
   factory :clearance_batch do
+    open false
     factory :clearance_batch_with_items do
       transient do
         items_count 5
       end
       after(:create) do |clearance_batch, evaluator|
         create_list(:clearance_item, evaluator.items_count, clearance_batch: clearance_batch)
+      end
+      factory :open_batch do
+        open true
       end
     end
   end
