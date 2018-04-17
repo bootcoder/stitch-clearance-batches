@@ -7,11 +7,11 @@
       </div>
       <div class='form-group col-md-6'>
         <% if @in_progress_batches.any? %>
-        <%= f.select 'batch_id', options_from_collection_for_select(@in_progress_batches, :id, :title, @in_progress_batches.first.id.to_s), {include_blank: 'New Batch'}, {class: 'form-control'} %>
+        <%= f.select 'batch_id', options_from_collection_for_select(@in_progress_batches, :id, :title, @in_progress_batches.first.id.to_s), {include_blank: 'New Batch'}, {id: 'batch_select', class: 'form-control'} %>
         <% else %>
         <%= f.select 'batch_id', ['New Batch'], {}, {class: 'form-control'} %>
         <% end %>
-        <%= f.submit 'Clearance!', class: 'form-control btn btn-success' %>
+        <%= f.submit 'Clearance!', id: 'submit_clearance', class: 'form-control btn btn-success' %>
       </div>
     </div>
   <% end %>
