@@ -10,16 +10,7 @@
 
 <div class="container">
   <h1 class='text-center'><%= link_to image_tag('stitchfix.png', class: 'hero-img'), root_path %></h1>
-  <%- if flash[:notice] -%>
-    <div class="alert alert-info" role="alert">
-      <%= flash[:notice].html_safe %>
-    </div>
-  <%- end -%>
-  <%- if flash[:alert] -%>
-    <div class="alert alert-danger" role="alert">
-      <%= flash[:alert].html_safe %>
-    </div>
-  <%- end -%>
+  <%= render partial: 'notifications' %>
   <%= yield %>
 </div>
 
