@@ -58,9 +58,10 @@ describe ClearancingService do
       end
 
       it 'handles an item already clearanced' do
-        existing_item = FactoryBot.create(:clearance_item)
-        @clearance_service = ClearancingService.new(item_id: existing_item.id, batch: batch).execute!
-        expect(@clearance_service.errors).to include "Item id #{existing_item.id} already clearanced"
+        existing_batch = FactoryBot.create(:clearance_batch_with_items)
+        existing_item = existing_batch.items.first
+        @clearance_service = ClearancingService.new(item_id: existing_item.id, batch: existing_batch).execute!
+        expect(@clearance_service.errors).to include "Item id #{existing_item.id} already clearanced into Batch #{existing_batch.id}"
       end
 
       it 'handles an item not sellable' do
@@ -85,9 +86,10 @@ describe ClearancingService do
       end
 
       it 'handles an item already clearanced' do
-        existing_item = FactoryBot.create(:clearance_item)
+        existing_batch = FactoryBot.create(:clearance_batch_with_items)
+        existing_item = existing_batch.items.first
         @clearance_service = ClearancingService.new(item_id: existing_item.id, batch: nil).execute!
-        expect(@clearance_service.errors).to include "Item id #{existing_item.id} already clearanced"
+        expect(@clearance_service.errors).to include "Item id #{existing_item.id} already clearanced into Batch #{existing_batch.id}"
       end
 
       it 'handles an item not sellable' do
@@ -158,7 +160,7 @@ describe ClearancingService do
         end
         expect(@clearance_service.errors).to include("Item id #{non_existent_id} could not be found")
         expect(@clearance_service.errors).to include("Item id #{float_id.to_i} could not be found")
-        expect(@clearance_service.errors).to include("Item id #{unsellable_item.id} already clearanced")
+        expect(@clearance_service.errors).to include("Item id #{unsellable_item.id} already clearanced into Batch ")
       end
 
       it "includes all valid items in the batch" do

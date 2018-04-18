@@ -41,8 +41,7 @@ I felt if a user is adding items via a scan tool they would most likely need
 to add items to different clearance batches at different times. This need bore
 out the requirements which drove a significant portion of the development thereafter.
 
-I felt the best way to represent these states was with a flag attached to the batch itself.
-To do so cleanly I made a change in the schema. Along with doubling the number of tables displayed on index.
+I felt the best way to represent these states was with a flag attached to the batch itself. So I made a change in the schema, along with doubling the number of tables displayed on index.
 
 I could have accomplished my goal without these departures from the original product. Implementation would have been icky and not in line with the 'Rails Way'. And since the README specifically states changing schema as an option I felt it OK. Side Note on migrations, I originally called Active attr Open. That was a poor attr name choice. I removed that migration before submission. Just saying I know in real life you shouldn't go back and rm old migrations.
 

@@ -82,7 +82,8 @@ private
       @errors << "Item id #{@item_id} is not valid"
 
     elsif potential_item && potential_item.status == 'clearanced'
-      @errors << "Item id #{@item_id} already clearanced"
+      # NOTE: The catch at the end is there just to satisfy a spec condition. Not super happy about that.
+      @errors << "Item id #{@item_id} already clearanced into Batch #{potential_item.clearance_batch.id if potential_item.clearance_batch}"
 
     elsif !potential_item
       @errors << "Item id #{@item_id} could not be found"

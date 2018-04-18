@@ -8,7 +8,7 @@
 
 if Style.count <= 0
 
-def make_items(style,color,sizes: { 'M' => 10, 'S' => 5, 'L' => 10 })
+def make_items(style,color,sizes: { 'M' => 20, 'S' => 10, 'L' => 20 })
   sizes.each do |size,count|
     count.times do
       Item.create!(color: color, size: size, status: 'sellable', style: style)
@@ -54,6 +54,9 @@ Style.create!(name: "Blue Camo Print Boyfriend Jeans",
   make_items(style,"Navy")
 }
 else
+  # NOTE: I'm not gonna change your bin/setup but it's worth noting
+  # that db:setup includes running seeds. So this catch will always display.
+  # Consider removing the explicit seed command.
   puts "There is data in the database, which we're assuming is the seed data, so not reloading it"
   puts
   puts "(Do a bin/rails db:drop then bin/setup to force a reload if you want)"
@@ -62,14 +65,14 @@ end
 15.times do
   batch = ClearanceBatch.create
   rand(5..20).times do
-    batch = ClearancingService.new(item_id: rand(1..Item.count), batch: batch).batch
+    batch = ClearancingService.new(item_id: rand(200..Item.count), batch: batch).execute!.batch
   end
   batch.update_attributes(active: false)
 end
 
 5.times do
   batch = ClearanceBatch.create
-  rand(1..10).times do
-    batch = ClearancingService.new(item_id: rand(1..Item.count), batch: batch).batch
+  rand(5..10).times do
+    batch = ClearancingService.new(item_id: rand(200..Item.count), batch: batch).execute!.batch
   end
 end
