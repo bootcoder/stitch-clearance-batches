@@ -312,32 +312,76 @@ describe "clearance_batch" do
 
       it "by ID ascending" do
         item = batch_1.sort_items_by('id').first
-        visit '/clearance_batches/1'
-        within('#report-header') do
-          find('#sort-select').find(:xpath, 'option[1]').select_option
-          find('#btn-sort-select').click
-          wait_for_ajax
-        end
-        within('#batch-report tbody') do
-          expect(page.all('tr').count).to eq 5
-          expect(page.first('tr').first('th')).to have_content item.id
-        end
+        report_select_sort_by(1, item)
+        check_report_first_tr_has_item(item)
       end
-
 
       it "by ID descending" do
         item = batch_1.sort_items_by('id', true).first
-        visit '/clearance_batches/1'
-        within('#report-header') do
-          find('#sort-select').find(:xpath, 'option[2]').select_option
-          find('#btn-sort-select').click
-          wait_for_ajax
-        end
-        within('#batch-report tbody') do
-          expect(page.all('tr').count).to eq 5
-          expect(page.first('tr').first('th')).to have_content item.id
-        end
+        report_select_sort_by(2, item)
+        check_report_first_tr_has_item(item)
       end
+
+      it "by Size ascending" do
+        item = batch_1.sort_items_by('size').first
+        report_select_sort_by(3, item)
+        check_report_first_tr_has_item(item)
+      end
+
+      it "by Size descending" do
+        item = batch_1.sort_items_by('size', true).first
+        report_select_sort_by(4, item)
+        check_report_first_tr_has_item(item)
+      end
+
+      it "by Color ascending" do
+        item = batch_1.sort_items_by('color').first
+        report_select_sort_by(5, item)
+        check_report_first_tr_has_item(item)
+      end
+
+      it "by Color descending" do
+        item = batch_1.sort_items_by('color', true).first
+        report_select_sort_by(6, item)
+        check_report_first_tr_has_item(item)
+      end
+
+      it "by Price ascending" do
+        item = batch_1.sort_items_by('price_sold').first
+        report_select_sort_by(7, item)
+        check_report_first_tr_has_item(item)
+      end
+
+      it "by Price descending" do
+        item = batch_1.sort_items_by('price_sold', true).first
+        report_select_sort_by(8, item)
+        check_report_first_tr_has_item(item)
+      end
+
+      it "by Style ascending" do
+        item = batch_1.sort_items_by('style_id').first
+        report_select_sort_by(9, item)
+        check_report_first_tr_has_item(item)
+      end
+
+      it "by Style descending" do
+        item = batch_1.sort_items_by('style_id', true).first
+        report_select_sort_by(10, item)
+        check_report_first_tr_has_item(item)
+      end
+
+      it "by Date Sold ascending" do
+        item = batch_1.sort_items_by('sold_at').first
+        report_select_sort_by(11, item)
+        check_report_first_tr_has_item(item)
+      end
+
+      it "by Date Sold descending" do
+        item = batch_1.sort_items_by('sold_at', true).first
+        report_select_sort_by(12, item)
+        check_report_first_tr_has_item(item)
+      end
+
     end
   end
 

@@ -23,6 +23,23 @@ module CapybaraHelper
     self
   end
 
+  def check_report_first_tr_has_item(item)
+    within('#batch-report tbody') do
+      expect(page.all('tr').count).to eq 5
+      expect(page.first('tr').first('th')).to have_content item.id
+    end
+  end
+
+  def report_select_sort_by(option_idx, item)
+    visit '/clearance_batches/1'
+    within('#report-header') do
+      find('#sort-select').find(:xpath, "option[#{option_idx}]").select_option
+      find('#btn-sort-select').click
+      wait_for_ajax
+    end
+    self
+  end
+
   def upload_batch_file(file_name)
     visit "/"
     within('table.completed_table') do

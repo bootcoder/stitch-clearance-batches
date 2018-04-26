@@ -19,18 +19,41 @@ class ClearanceBatchesController < ApplicationController
 
   def show
     @clearance_batch = ClearanceBatch.includes(:items).find(params[:id])
-    @items = what_the_sort(@clearance_batch, clearance_params[:sort])
+    @sort_options = {
+      'id-asc' => {attr: 'id', text: 'ID UP'},
+      'id-desc' => {attr: 'id', text: 'ID DN', desc: true},
+      'size-asc' => {attr: 'size', text: 'Size UP'},
+      'size-desc' => {attr: 'size', text: 'Size DN', desc: true},
+      'color-asc' => {attr: 'color', text: 'Color UP'},
+      'color-desc' => {attr: 'color', text: 'Color DN', desc: true},
+      'price-asc' => {attr: 'price_sold', text: 'Price UP'},
+      'price-desc' => {attr: 'price_sold', text: 'Price DN', desc: true},
+      'style-asc' => {attr: 'style_id', text: 'Style UP'},
+      'style-desc' => {attr: 'style_id', text: 'Style DN', desc: true},
+      'date-asc' => {attr: 'sold_at', text: 'Date UP'},
+      'date-desc' => {attr: 'sold_at', text: 'Date DN', desc: true},
+      'updated-at-asc' => {attr: 'updated_at', text: 'Updated UP'},
+      'updated-at-desc' => {attr: 'updated_at', text: 'Updated DN', desc: true},
+    }
 
-    respond_to do |format|
-      format.html
-      format.csv
-      format.js
-      format.pdf do
-        render pdf: "clearance_batch_#{@clearance_batch.id}",
-               template: 'clearance_batches/_report.html.erb',
-               layout: 'pdf.html',
-               title: "clearance_batch_#{@clearance_batch.id}"
+    @select_options = []
+    @sort_options.keys.map { |e| @select_options << [@sort_options[e][:text], e] }
+
+    if @clearance_batch
+      @items = what_the_sort(@clearance_batch, clearance_params[:sort])
+      respond_to do |format|
+        format.html
+        format.csv
+        format.js
+        format.pdf do
+          render pdf: "clearance_batch_#{@clearance_batch.id}",
+                 template: 'clearance_batches/_report.html.erb',
+                 layout: 'pdf.html',
+                 title: "clearance_batch_#{@clearance_batch.id}"
+        end
       end
+    else
+      # NOTE: Handle NOT FOUND
     end
   end
 
@@ -103,15 +126,16 @@ class ClearanceBatchesController < ApplicationController
   end
 
   def what_the_sort(batch, sort)
-    pea batch
-    case sort
-    when 'id-asc'
-      return batch.sort_items_by('id')
-    when 'id-desc'
-      return batch.sort_items_by('id', true)
-    else
-      return batch.sort_items_by('updated_at', true)
-    end
+    sort ||= 'updated-at-desc'
+    return batch.sort_items_by(@sort_options[sort][:attr], @sort_options[sort][:desc])
+    # case sort
+    # when 'id_asc'
+    #   return batch.sort_items_by('id')
+    # when 'id-desc'
+    #   return batch.sort_items_by('id', true)
+    # else
+    #   return batch.sort_items_by('updated_at', true)
+    # end
   end
 
 end
