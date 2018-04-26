@@ -1,3 +1,6 @@
+# NOTE: DEBUGGER
+system 'clear'
+
 class ClearanceBatchesController < ApplicationController
 
 
@@ -16,10 +19,12 @@ class ClearanceBatchesController < ApplicationController
 
   def show
     @clearance_batch = ClearanceBatch.includes(:items).find(params[:id])
+    @items = what_the_sort(@clearance_batch, clearance_params[:sort])
 
     respond_to do |format|
       format.html
       format.csv
+      format.js
       format.pdf do
         render pdf: "clearance_batch_#{@clearance_batch.id}",
                template: 'clearance_batches/_report.html.erb',
@@ -94,7 +99,19 @@ class ClearanceBatchesController < ApplicationController
 
   # NOTE: Added Strong params because..... That's what you do. :-)
   def clearance_params
-    params.permit(:csv_file, :item_id, :batch_id, :close_batch, :activate_batch)
+    params.permit(:csv_file, :item_id, :batch_id, :close_batch, :activate_batch, :sort)
+  end
+
+  def what_the_sort(batch, sort)
+    pea batch
+    case sort
+    when 'id-asc'
+      return batch.sort_items_by('id')
+    when 'id-desc'
+      return batch.sort_items_by('id', true)
+    else
+      return batch.sort_items_by('updated_at', true)
+    end
   end
 
 end

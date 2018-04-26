@@ -307,6 +307,38 @@ describe "clearance_batch" do
       end
 
     end
+
+    context "SORTS", js: true do
+
+      it "by ID ascending" do
+        item = batch_1.sort_items_by('id').first
+        visit '/clearance_batches/1'
+        within('#report-header') do
+          find('#sort-select').find(:xpath, 'option[1]').select_option
+          find('#btn-sort-select').click
+          wait_for_ajax
+        end
+        within('#batch-report tbody') do
+          expect(page.all('tr').count).to eq 5
+          expect(page.first('tr').first('th')).to have_content item.id
+        end
+      end
+
+
+      it "by ID descending" do
+        item = batch_1.sort_items_by('id', true).first
+        visit '/clearance_batches/1'
+        within('#report-header') do
+          find('#sort-select').find(:xpath, 'option[2]').select_option
+          find('#btn-sort-select').click
+          wait_for_ajax
+        end
+        within('#batch-report tbody') do
+          expect(page.all('tr').count).to eq 5
+          expect(page.first('tr').first('th')).to have_content item.id
+        end
+      end
+    end
   end
 
 end

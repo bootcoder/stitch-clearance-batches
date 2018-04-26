@@ -11,7 +11,7 @@
         <th scope='col' >Status</th>
       </thead>
       <tbody>
-        <% @clearance_batch.items.each_with_index do |item, idx| %>
+        <% @items.each_with_index do |item, idx| %>
           <tr class="report-row">
             <th scope='row' ><%= item.id %></th>
             <td><%= item.size %></td>
