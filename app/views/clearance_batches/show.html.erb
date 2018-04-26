@@ -14,8 +14,10 @@
     <div class='col-md-3 text-center'>
       <h4>Sort by</h4>
       <%= form_with url: clearance_batch_path(@clearance_batch), method: :get, class: 'form-inline' do |f| %>
-        <%= f.select :sort, options_for_select(@select_options), {}, {class: 'form-control', id: 'sort-select'} %>
-        <%= f.button '>', id: 'btn-sort-select' %>
+        <div class='form-group'>
+          <%= f.select :sort, options_for_select(@select_options), {}, {class: 'form-control', id: 'sort-select'} %>
+          <%= f.button '>', id: 'btn-sort-select', class: 'btn btn-primary' %>
+        </div>
       <% end %>
     </div>
   </div>
